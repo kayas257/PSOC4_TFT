@@ -1,0 +1,2812 @@
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.SysTickIsrHandler,"ax",%progbits
+  20              		.align	2
+  21              		.global	SysTickIsrHandler
+  22              		.code	16
+  23              		.thumb_func
+  24              		.type	SysTickIsrHandler, %function
+  25              	SysTickIsrHandler:
+  26              	.LFB61:
+  27              		.file 1 "main.c"
+   1:main.c        **** /* ========================================
+   2:main.c        ****  *
+   3:main.c        ****  * Copyright YOUR COMPANY, THE YEAR
+   4:main.c        ****  * All Rights Reserved
+   5:main.c        ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:main.c        ****  *
+   7:main.c        ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:main.c        ****  * WHICH IS THE PROPERTY OF your company.
+   9:main.c        ****  *
+  10:main.c        ****  * ========================================
+  11:main.c        **** */
+  12:main.c        **** 
+  13:main.c        **** #include "project.h"
+  14:main.c        **** #include "TFT.h"
+  15:main.c        **** #include <stdio.h>  
+  16:main.c        **** 
+  17:main.c        **** extern uint16_t MAX_X, MAX_Y ; 
+  18:main.c        **** #define SYSTICK_EACH_10_HZ (10u)
+  19:main.c        **** #define SYSTICK_RELOAD (CYDEV_BCLK__SYSCLK__HZ / SYSTICK_EACH_10_HZ)
+  20:main.c        **** CY_ISR_PROTO(SysTickIsrHandler);
+  21:main.c        **** int main(void)
+  22:main.c        **** { 
+  23:main.c        ****     int i,j;
+  24:main.c        ****     char timeBuffer[16u];
+  25:main.c        ****    PWM_Start();
+  26:main.c        ****     
+  27:main.c        **** uint32_t min=0;
+  28:main.c        **** uint32_t hr=0;
+  29:main.c        **** uint32_t tim1;
+  30:main.c        ****  SPIM_Start();
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 2
+
+
+  31:main.c        ****  TFT_Init(1);
+  32:main.c        ****  TFT_ClearScreen();
+  33:main.c        **** RTC_Start ();
+  34:main.c        ****     RTC_SetPeriod(1u,SYSTICK_EACH_10_HZ);
+  35:main.c        ****          CySysTickStart();
+  36:main.c        ****     /*config Systick Timer to Generate interruos every 100ms*/
+  37:main.c        ****    CySysTickSetReload(SYSTICK_RELOAD);
+  38:main.c        ****    for (i=0u; i <CY_SYS_SYST_NUM_OF_CALLBACKS; ++i)
+  39:main.c        ****     {
+  40:main.c        ****         if (CySysTickGetCallback(i) == NULL)
+  41:main.c        ****         {
+  42:main.c        ****   
+  43:main.c        ****             CySysTickSetCallback(i,SysTickIsrHandler);
+  44:main.c        ****             break;
+  45:main.c        ****         }
+  46:main.c        ****      } 
+  47:main.c        ****     CyGlobalIntEnable;
+  48:main.c        ****     ring_Write(0);
+  49:main.c        ****     TFT_FillRectangle(0,  0,   127,   157, BLUE2);
+  50:main.c        ****     for(;;)
+  51:main.c        ****     { 
+  52:main.c        ****         
+  53:main.c        ****         tim1=RTC_GetTime ();
+  54:main.c        ****        
+  55:main.c        ****       // landscape with connector on left
+  56:main.c        ****    // TFT_FillScreen(0, MAX_X, 0, MAX_Y, BLACK);	
+  57:main.c        ****     //     DrawStringBl(char *string,uint16_t poX, uint16_t poY, uint16_t size,uint16_t fgcolor,uin
+  58:main.c        ****     //DrawStringBl("TFT Testing...",  15, 50, 2, RED, GREEN);
+  59:main.c        ****  TFT_FillRectangle(5, 100, 20, 50, 0x0000);
+  60:main.c        ****  sprintf(timeBuffer,"%02u:%02u:%02u",RTC_GetHours(tim1),RTC_GetMinutes(tim1),RTC_GetSecond(tim1));
+  61:main.c        **** //    CyDelay(5000);
+  62:main.c        **** if(min!=RTC_GetMinutes(tim1)){
+  63:main.c        **** min=RTC_GetMinutes(tim1);
+  64:main.c        ****  TFT_FillRectangle(5, 50, 20, 50, 0x0000);
+  65:main.c        **** }
+  66:main.c        **** 
+  67:main.c        **** if(hr!=RTC_GetHours(tim1)){
+  68:main.c        **** hr=RTC_GetHours(tim1);
+  69:main.c        ****  TFT_FillRectangle(5, 30, 20, 40, 0x0000);
+  70:main.c        **** for(j=0;j<hr;j++)
+  71:main.c        **** {
+  72:main.c        **** ring_Write(~ring_Read());
+  73:main.c        **** CyDelay(100);
+  74:main.c        **** }
+  75:main.c        **** }
+  76:main.c        ****     //  FillRectangle(X, Y, length, width, color);
+  77:main.c        ****     //TFT_FillRectangle(0,  0,   20,    20, BLUE2);
+  78:main.c        ****  DrawString(timeBuffer,  5, 30, 2, BLUE2);
+  79:main.c        ****     //  DrawString(char *string, poX, poY, size,    fgcolor);
+  80:main.c        ****    // TFT_DrawString (Text,          5,   1,    1,    WHITE);
+  81:main.c        ****  ring_Write(0);
+  82:main.c        **** CyDelay(900);
+  83:main.c        ****     }
+  84:main.c        ****     
+  85:main.c        **** }
+  86:main.c        **** void SysTickIsrHandler(void)
+  87:main.c        **** {
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 3
+
+
+  28              		.loc 1 87 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 10B5     		push	{r4, lr}
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 4, -8
+  35              		.cfi_offset 14, -4
+  88:main.c        ****     RTC_Update();
+  36              		.loc 1 88 0
+  37 0002 FFF7FEFF 		bl	RTC_Update
+  38              	.LVL0:
+  89:main.c        **** }
+  39              		.loc 1 89 0
+  40              		@ sp needed
+  41 0006 10BD     		pop	{r4, pc}
+  42              		.cfi_endproc
+  43              	.LFE61:
+  44              		.size	SysTickIsrHandler, .-SysTickIsrHandler
+  45              		.section	.text.main,"ax",%progbits
+  46              		.align	2
+  47              		.global	main
+  48              		.code	16
+  49              		.thumb_func
+  50              		.type	main, %function
+  51              	main:
+  52              	.LFB60:
+  22:main.c        ****     int i,j;
+  53              		.loc 1 22 0
+  54              		.cfi_startproc
+  55              		@ args = 0, pretend = 0, frame = 16
+  56              		@ frame_needed = 0, uses_anonymous_args = 0
+  57 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  58              		.cfi_def_cfa_offset 20
+  59              		.cfi_offset 4, -20
+  60              		.cfi_offset 5, -16
+  61              		.cfi_offset 6, -12
+  62              		.cfi_offset 7, -8
+  63              		.cfi_offset 14, -4
+  64 0002 4746     		mov	r7, r8
+  65 0004 80B4     		push	{r7}
+  66              		.cfi_def_cfa_offset 24
+  67              		.cfi_offset 8, -24
+  68 0006 86B0     		sub	sp, sp, #24
+  69              		.cfi_def_cfa_offset 48
+  25:main.c        ****     
+  70              		.loc 1 25 0
+  71 0008 FFF7FEFF 		bl	PWM_Start
+  72              	.LVL1:
+  30:main.c        ****  TFT_Init(1);
+  73              		.loc 1 30 0
+  74 000c FFF7FEFF 		bl	SPIM_Start
+  75              	.LVL2:
+  31:main.c        ****  TFT_ClearScreen();
+  76              		.loc 1 31 0
+  77 0010 0120     		movs	r0, #1
+  78 0012 FFF7FEFF 		bl	TFT_Init
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 4
+
+
+  79              	.LVL3:
+  32:main.c        **** RTC_Start ();
+  80              		.loc 1 32 0
+  81 0016 FFF7FEFF 		bl	TFT_ClearScreen
+  82              	.LVL4:
+  33:main.c        ****     RTC_SetPeriod(1u,SYSTICK_EACH_10_HZ);
+  83              		.loc 1 33 0
+  84 001a FFF7FEFF 		bl	RTC_Start
+  85              	.LVL5:
+  34:main.c        ****          CySysTickStart();
+  86              		.loc 1 34 0
+  87 001e 0A21     		movs	r1, #10
+  88 0020 0120     		movs	r0, #1
+  89 0022 FFF7FEFF 		bl	RTC_SetPeriod
+  90              	.LVL6:
+  35:main.c        ****     /*config Systick Timer to Generate interruos every 100ms*/
+  91              		.loc 1 35 0
+  92 0026 FFF7FEFF 		bl	CySysTickStart
+  93              	.LVL7:
+  37:main.c        ****    for (i=0u; i <CY_SYS_SYST_NUM_OF_CALLBACKS; ++i)
+  94              		.loc 1 37 0
+  95 002a 4248     		ldr	r0, .L13
+  96 002c FFF7FEFF 		bl	CySysTickSetReload
+  97              	.LVL8:
+  38:main.c        ****     {
+  98              		.loc 1 38 0
+  99 0030 0024     		movs	r4, #0
+ 100 0032 0AE0     		b	.L3
+ 101              	.LVL9:
+ 102              	.L6:
+  40:main.c        ****         {
+ 103              		.loc 1 40 0
+ 104 0034 2000     		movs	r0, r4
+ 105 0036 FFF7FEFF 		bl	CySysTickGetCallback
+ 106              	.LVL10:
+ 107 003a 0028     		cmp	r0, #0
+ 108 003c 04D1     		bne	.L4
+  43:main.c        ****             break;
+ 109              		.loc 1 43 0
+ 110 003e 3E49     		ldr	r1, .L13+4
+ 111 0040 2800     		movs	r0, r5
+ 112 0042 FFF7FEFF 		bl	CySysTickSetCallback
+ 113              	.LVL11:
+  44:main.c        ****         }
+ 114              		.loc 1 44 0
+ 115 0046 03E0     		b	.L5
+ 116              	.L4:
+  38:main.c        ****     {
+ 117              		.loc 1 38 0 discriminator 2
+ 118 0048 0134     		adds	r4, r4, #1
+ 119              	.LVL12:
+ 120              	.L3:
+  38:main.c        ****     {
+ 121              		.loc 1 38 0 is_stmt 0 discriminator 1
+ 122 004a 2500     		movs	r5, r4
+ 123 004c 042C     		cmp	r4, #4
+ 124 004e F1D9     		bls	.L6
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 5
+
+
+ 125              	.L5:
+  47:main.c        ****     ring_Write(0);
+ 126              		.loc 1 47 0 is_stmt 1
+ 127              		.syntax divided
+ 128              	@ 47 "main.c" 1
+ 129 0050 62B6     		CPSIE   i
+ 130              	@ 0 "" 2
+  48:main.c        ****     TFT_FillRectangle(0,  0,   127,   157, BLUE2);
+ 131              		.loc 1 48 0
+ 132              		.thumb
+ 133              		.syntax unified
+ 134 0052 0020     		movs	r0, #0
+ 135 0054 FFF7FEFF 		bl	ring_Write
+ 136              	.LVL13:
+  49:main.c        ****     for(;;)
+ 137              		.loc 1 49 0
+ 138 0058 384B     		ldr	r3, .L13+8
+ 139 005a 0093     		str	r3, [sp]
+ 140 005c 9D23     		movs	r3, #157
+ 141 005e 7F22     		movs	r2, #127
+ 142 0060 0021     		movs	r1, #0
+ 143 0062 0020     		movs	r0, #0
+ 144 0064 FFF7FEFF 		bl	TFT_FillRectangle
+ 145              	.LVL14:
+  28:main.c        **** uint32_t tim1;
+ 146              		.loc 1 28 0
+ 147 0068 0026     		movs	r6, #0
+  27:main.c        **** uint32_t hr=0;
+ 148              		.loc 1 27 0
+ 149 006a 0023     		movs	r3, #0
+ 150 006c 9846     		mov	r8, r3
+ 151              	.LVL15:
+ 152              	.L11:
+ 153              	.LBB17:
+  53:main.c        ****        
+ 154              		.loc 1 53 0
+ 155 006e FFF7FEFF 		bl	RTC_GetTime
+ 156              	.LVL16:
+ 157 0072 0400     		movs	r4, r0
+ 158              	.LVL17:
+  59:main.c        ****  sprintf(timeBuffer,"%02u:%02u:%02u",RTC_GetHours(tim1),RTC_GetMinutes(tim1),RTC_GetSecond(tim1));
+ 159              		.loc 1 59 0
+ 160 0074 0023     		movs	r3, #0
+ 161 0076 0093     		str	r3, [sp]
+ 162 0078 3233     		adds	r3, r3, #50
+ 163 007a 1422     		movs	r2, #20
+ 164 007c 6421     		movs	r1, #100
+ 165 007e 0520     		movs	r0, #5
+ 166              	.LVL18:
+ 167 0080 FFF7FEFF 		bl	TFT_FillRectangle
+ 168              	.LVL19:
+ 169              	.LBB18:
+ 170              	.LBB19:
+ 171              		.file 2 "Generated_Source\\PSoC4/RTC.h"
+   1:Generated_Source\PSoC4/RTC.h **** /***************************************************************************//**
+   2:Generated_Source\PSoC4/RTC.h **** * \file Name: RTC.h
+   3:Generated_Source\PSoC4/RTC.h **** * \version 1.30
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 6
+
+
+   4:Generated_Source\PSoC4/RTC.h **** *
+   5:Generated_Source\PSoC4/RTC.h **** *  This file provides constants and parameter values for the RTC_P4 Component.
+   6:Generated_Source\PSoC4/RTC.h **** *
+   7:Generated_Source\PSoC4/RTC.h **** ********************************************************************************
+   8:Generated_Source\PSoC4/RTC.h **** * Copyright 2015-2017, Cypress Semiconductor Corporation.  All rights reserved.
+   9:Generated_Source\PSoC4/RTC.h **** * You may use this file only in accordance with the license, terms, conditions,
+  10:Generated_Source\PSoC4/RTC.h **** * disclaimers, and limitations in the end user license agreement accompanying
+  11:Generated_Source\PSoC4/RTC.h **** * the software package with which this file was provided.
+  12:Generated_Source\PSoC4/RTC.h **** *******************************************************************************/
+  13:Generated_Source\PSoC4/RTC.h **** 
+  14:Generated_Source\PSoC4/RTC.h **** #if !defined(CY_RTC_P4_RTC_H)
+  15:Generated_Source\PSoC4/RTC.h **** #define CY_RTC_P4_RTC_H
+  16:Generated_Source\PSoC4/RTC.h **** 
+  17:Generated_Source\PSoC4/RTC.h **** #include <cytypes.h>
+  18:Generated_Source\PSoC4/RTC.h **** #include <CyLib.h>
+  19:Generated_Source\PSoC4/RTC.h **** 
+  20:Generated_Source\PSoC4/RTC.h **** 
+  21:Generated_Source\PSoC4/RTC.h **** /*******************************************************************************
+  22:Generated_Source\PSoC4/RTC.h **** *    Data types definition
+  23:Generated_Source\PSoC4/RTC.h **** *******************************************************************************/
+  24:Generated_Source\PSoC4/RTC.h **** /**
+  25:Generated_Source\PSoC4/RTC.h **** * \addtogroup group_enums
+  26:Generated_Source\PSoC4/RTC.h **** * \{
+  27:Generated_Source\PSoC4/RTC.h **** */
+  28:Generated_Source\PSoC4/RTC.h **** /** Daylight saving Time format enumeration */
+  29:Generated_Source\PSoC4/RTC.h **** typedef enum
+  30:Generated_Source\PSoC4/RTC.h **** {
+  31:Generated_Source\PSoC4/RTC.h ****     RTC_DST_DATE_RELATIVE = 0u,  /**< Relative DST format */
+  32:Generated_Source\PSoC4/RTC.h ****     RTC_DST_DATE_FIXED = 1u      /**< Fixed DST format */
+  33:Generated_Source\PSoC4/RTC.h **** }RTC_DST_DATETYPE_ENUM;
+  34:Generated_Source\PSoC4/RTC.h **** /** \} group_enums */
+  35:Generated_Source\PSoC4/RTC.h **** 
+  36:Generated_Source\PSoC4/RTC.h **** /**
+  37:Generated_Source\PSoC4/RTC.h **** * \addtogroup group_structures
+  38:Generated_Source\PSoC4/RTC.h **** * \{
+  39:Generated_Source\PSoC4/RTC.h **** */
+  40:Generated_Source\PSoC4/RTC.h **** 
+  41:Generated_Source\PSoC4/RTC.h **** /** RTC_DATE_TIME structure is the data structure that is used to 
+  42:Generated_Source\PSoC4/RTC.h **** * save the current time and date (RTC_currentTimeDate), and Alarm time and date 
+  43:Generated_Source\PSoC4/RTC.h **** *(RTC_alarmCfgTimeDate)
+  44:Generated_Source\PSoC4/RTC.h **** *
+  45:Generated_Source\PSoC4/RTC.h **** */
+  46:Generated_Source\PSoC4/RTC.h **** typedef struct
+  47:Generated_Source\PSoC4/RTC.h **** {
+  48:Generated_Source\PSoC4/RTC.h ****     uint32 time;        /**< Time in the format used in API*/
+  49:Generated_Source\PSoC4/RTC.h ****     uint32 date;        /**< Date in the format used in API*/
+  50:Generated_Source\PSoC4/RTC.h ****     uint32 dayOfWeek;   /**< Day of the week, see \ref group_rtc_day_of_the_week */
+  51:Generated_Source\PSoC4/RTC.h ****     uint32 status;      /**< RTC status, see \ref group_rtc_status */
+  52:Generated_Source\PSoC4/RTC.h **** }RTC_DATE_TIME;
+  53:Generated_Source\PSoC4/RTC.h **** 
+  54:Generated_Source\PSoC4/RTC.h **** /*
+  55:Generated_Source\PSoC4/RTC.h **** * RTC_DST_TIME structure is the data structure that is used to 
+  56:Generated_Source\PSoC4/RTC.h **** * save time and date values for Daylight Savings Time Start and Stop 
+  57:Generated_Source\PSoC4/RTC.h **** * (RTC_dstTimeDateStart and RTC_dstTimeDateStop)
+  58:Generated_Source\PSoC4/RTC.h **** */
+  59:Generated_Source\PSoC4/RTC.h **** typedef struct
+  60:Generated_Source\PSoC4/RTC.h **** {
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 7
+
+
+  61:Generated_Source\PSoC4/RTC.h ****     uint32 hour;          /**< Hour value */
+  62:Generated_Source\PSoC4/RTC.h ****     uint32 dayOfWeek;     /**< Day of the week, see \ref group_rtc_day_of_the_week */
+  63:Generated_Source\PSoC4/RTC.h ****     uint32 dayOfMonth;    /**< Day of the month */
+  64:Generated_Source\PSoC4/RTC.h ****     uint32 weekOfMonth;   /**< Week of the month, see \ref group_rtc_dst_week_of_month */
+  65:Generated_Source\PSoC4/RTC.h ****     uint32 month;         /**< Month value, see \ref group_rtc_month */
+  66:Generated_Source\PSoC4/RTC.h ****     uint8  timeFormat;    /**< The DST operation mode, see \ref 
+  67:Generated_Source\PSoC4/RTC.h ****                                RTC_DST_DATETYPE_ENUM */
+  68:Generated_Source\PSoC4/RTC.h **** }RTC_DST_TIME;
+  69:Generated_Source\PSoC4/RTC.h **** /** \} group_structures */
+  70:Generated_Source\PSoC4/RTC.h **** 
+  71:Generated_Source\PSoC4/RTC.h **** /*******************************************************************************
+  72:Generated_Source\PSoC4/RTC.h **** *    Enumerated Types and Parameters
+  73:Generated_Source\PSoC4/RTC.h **** *******************************************************************************/
+  74:Generated_Source\PSoC4/RTC.h **** /* Time Format setting constants */
+  75:Generated_Source\PSoC4/RTC.h **** #define RTC__HOUR_12 1
+  76:Generated_Source\PSoC4/RTC.h **** #define RTC__HOUR_24 0
+  77:Generated_Source\PSoC4/RTC.h **** 
+  78:Generated_Source\PSoC4/RTC.h **** /*  Date Format setting constants */
+  79:Generated_Source\PSoC4/RTC.h **** #define RTC__MM_DD_YYYY 0
+  80:Generated_Source\PSoC4/RTC.h **** #define RTC__DD_MM_YYYY 1
+  81:Generated_Source\PSoC4/RTC.h **** #define RTC__YYYY_MM_DD 2
+  82:Generated_Source\PSoC4/RTC.h **** 
+  83:Generated_Source\PSoC4/RTC.h **** /* Date Type setting constants */
+  84:Generated_Source\PSoC4/RTC.h **** #define RTC__RELATIVE 0
+  85:Generated_Source\PSoC4/RTC.h **** #define RTC__FIXED 1
+  86:Generated_Source\PSoC4/RTC.h **** 
+  87:Generated_Source\PSoC4/RTC.h **** /* DST Hour setting constants */
+  88:Generated_Source\PSoC4/RTC.h **** #define RTC__H0000 0
+  89:Generated_Source\PSoC4/RTC.h **** #define RTC__H0100 1
+  90:Generated_Source\PSoC4/RTC.h **** #define RTC__H0200 2
+  91:Generated_Source\PSoC4/RTC.h **** #define RTC__H0300 3
+  92:Generated_Source\PSoC4/RTC.h **** #define RTC__H0400 4
+  93:Generated_Source\PSoC4/RTC.h **** #define RTC__H0500 5
+  94:Generated_Source\PSoC4/RTC.h **** #define RTC__H0600 6
+  95:Generated_Source\PSoC4/RTC.h **** #define RTC__H0700 7
+  96:Generated_Source\PSoC4/RTC.h **** #define RTC__H0800 8
+  97:Generated_Source\PSoC4/RTC.h **** #define RTC__H0900 9
+  98:Generated_Source\PSoC4/RTC.h **** #define RTC__H1000 10
+  99:Generated_Source\PSoC4/RTC.h **** #define RTC__H1100 11
+ 100:Generated_Source\PSoC4/RTC.h **** #define RTC__H1200 12
+ 101:Generated_Source\PSoC4/RTC.h **** #define RTC__H1300 13
+ 102:Generated_Source\PSoC4/RTC.h **** #define RTC__H1400 14
+ 103:Generated_Source\PSoC4/RTC.h **** #define RTC__H1500 15
+ 104:Generated_Source\PSoC4/RTC.h **** #define RTC__H1600 16
+ 105:Generated_Source\PSoC4/RTC.h **** #define RTC__H1700 17
+ 106:Generated_Source\PSoC4/RTC.h **** #define RTC__H1800 18
+ 107:Generated_Source\PSoC4/RTC.h **** #define RTC__H1900 19
+ 108:Generated_Source\PSoC4/RTC.h **** #define RTC__H2000 20
+ 109:Generated_Source\PSoC4/RTC.h **** #define RTC__H2100 21
+ 110:Generated_Source\PSoC4/RTC.h **** #define RTC__H2200 22
+ 111:Generated_Source\PSoC4/RTC.h **** #define RTC__H2300 23
+ 112:Generated_Source\PSoC4/RTC.h **** 
+ 113:Generated_Source\PSoC4/RTC.h **** /* DST DayOfWeek setting constants */
+ 114:Generated_Source\PSoC4/RTC.h **** #define RTC__SUNDAY 1
+ 115:Generated_Source\PSoC4/RTC.h **** #define RTC__MONDAY 2
+ 116:Generated_Source\PSoC4/RTC.h **** #define RTC__TUESDAY 3
+ 117:Generated_Source\PSoC4/RTC.h **** #define RTC__WEDNESDAY 4
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 8
+
+
+ 118:Generated_Source\PSoC4/RTC.h **** #define RTC__THURSDAY 5
+ 119:Generated_Source\PSoC4/RTC.h **** #define RTC__FRIDAY 6
+ 120:Generated_Source\PSoC4/RTC.h **** #define RTC__SATURDAY 7
+ 121:Generated_Source\PSoC4/RTC.h **** 
+ 122:Generated_Source\PSoC4/RTC.h **** /* DST Month setting constants */
+ 123:Generated_Source\PSoC4/RTC.h **** #define RTC__JAN 1
+ 124:Generated_Source\PSoC4/RTC.h **** #define RTC__FEB 2
+ 125:Generated_Source\PSoC4/RTC.h **** #define RTC__MAR 3
+ 126:Generated_Source\PSoC4/RTC.h **** #define RTC__APR 4
+ 127:Generated_Source\PSoC4/RTC.h **** #define RTC__MAY 5
+ 128:Generated_Source\PSoC4/RTC.h **** #define RTC__JUN 6
+ 129:Generated_Source\PSoC4/RTC.h **** #define RTC__JUL 7
+ 130:Generated_Source\PSoC4/RTC.h **** #define RTC__AUG 8
+ 131:Generated_Source\PSoC4/RTC.h **** #define RTC__SEP 9
+ 132:Generated_Source\PSoC4/RTC.h **** #define RTC__OCT 10
+ 133:Generated_Source\PSoC4/RTC.h **** #define RTC__NOV 11
+ 134:Generated_Source\PSoC4/RTC.h **** #define RTC__DEC 12
+ 135:Generated_Source\PSoC4/RTC.h **** 
+ 136:Generated_Source\PSoC4/RTC.h **** /* DST WeekOfMonth setting constants */
+ 137:Generated_Source\PSoC4/RTC.h **** #define RTC__FIRST 1
+ 138:Generated_Source\PSoC4/RTC.h **** #define RTC__SECOND 2
+ 139:Generated_Source\PSoC4/RTC.h **** #define RTC__THIRD 3
+ 140:Generated_Source\PSoC4/RTC.h **** #define RTC__FOURTH 4
+ 141:Generated_Source\PSoC4/RTC.h **** #define RTC__FIFTH 5
+ 142:Generated_Source\PSoC4/RTC.h **** #define RTC__LAST 6
+ 143:Generated_Source\PSoC4/RTC.h **** 
+ 144:Generated_Source\PSoC4/RTC.h **** 
+ 145:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_DATA_FORMAT     (0u)
+ 146:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_TIME_FORMAT     (0u)
+ 147:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_UPDATE_MODE     (0u)
+ 148:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_SECOND          (9u)
+ 149:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_MINUTE          (10u)
+ 150:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_HOUR            (18u)
+ 151:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_DAY             (9u)
+ 152:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_MONTH           (9u)
+ 153:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_YEAR            (2018u)
+ 154:Generated_Source\PSoC4/RTC.h **** 
+ 155:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_ALARM_STATUS    (0u)
+ 156:Generated_Source\PSoC4/RTC.h **** 
+ 157:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_DST_STATUS      (0u)
+ 158:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_DST_DATE_TYPE   (0u)
+ 159:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_DST_START_MONTH (3uL)
+ 160:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_DST_START_WOM   (6uL)
+ 161:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_DST_START_DOM   (22uL)
+ 162:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_DST_START_DOW   (1uL)
+ 163:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_DST_START_HRS   (0uL)
+ 164:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_DST_STOP_MONTH  (10uL)
+ 165:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_DST_STOP_DOM    (22uL)
+ 166:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_DST_STOP_DOW    (1uL)
+ 167:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_DST_STOP_WOM    (6uL)
+ 168:Generated_Source\PSoC4/RTC.h **** #define RTC_INITIAL_DST_STOP_HRS    (0uL)
+ 169:Generated_Source\PSoC4/RTC.h **** 
+ 170:Generated_Source\PSoC4/RTC.h **** /**
+ 171:Generated_Source\PSoC4/RTC.h **** * \addtogroup group_constants
+ 172:Generated_Source\PSoC4/RTC.h **** * \{
+ 173:Generated_Source\PSoC4/RTC.h **** */
+ 174:Generated_Source\PSoC4/RTC.h **** 
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 9
+
+
+ 175:Generated_Source\PSoC4/RTC.h **** /**
+ 176:Generated_Source\PSoC4/RTC.h **** * \defgroup group_rtc_day_of_the_week Day of the week definitions
+ 177:Generated_Source\PSoC4/RTC.h **** * \{
+ 178:Generated_Source\PSoC4/RTC.h **** * Definitions of days in the week
+ 179:Generated_Source\PSoC4/RTC.h **** */
+ 180:Generated_Source\PSoC4/RTC.h **** #define RTC_SUNDAY     (RTC__SUNDAY)       /**< Sequential number of Sunday in the week */
+ 181:Generated_Source\PSoC4/RTC.h **** #define RTC_MONDAY     (RTC__MONDAY)       /**< Sequential number of Monday in the week */
+ 182:Generated_Source\PSoC4/RTC.h **** #define RTC_TUESDAY    (RTC__TUESDAY)      /**< Sequential number of Tuesday in the week */
+ 183:Generated_Source\PSoC4/RTC.h **** #define RTC_WEDNESDAY  (RTC__WEDNESDAY)    /**< Sequential number of Wednesday in the week */
+ 184:Generated_Source\PSoC4/RTC.h **** #define RTC_THURSDAY   (RTC__THURSDAY)     /**< Sequential number of Thursday in the week */
+ 185:Generated_Source\PSoC4/RTC.h **** #define RTC_FRIDAY     (RTC__FRIDAY)       /**< Sequential number of Friday in the week */
+ 186:Generated_Source\PSoC4/RTC.h **** #define RTC_SATURDAY   (RTC__SATURDAY)     /**< Sequential number of Saturday in the week */
+ 187:Generated_Source\PSoC4/RTC.h **** /** \} group_rtc_day_of_the_week */
+ 188:Generated_Source\PSoC4/RTC.h **** 
+ 189:Generated_Source\PSoC4/RTC.h **** /**
+ 190:Generated_Source\PSoC4/RTC.h **** * \defgroup group_rtc_dst_week_of_month DST Week of month setting constants definitions
+ 191:Generated_Source\PSoC4/RTC.h **** * \{
+ 192:Generated_Source\PSoC4/RTC.h **** * Week of month setting constants definitions for Daylight Saving Time feature
+ 193:Generated_Source\PSoC4/RTC.h **** */
+ 194:Generated_Source\PSoC4/RTC.h **** #define RTC_FIRST      (RTC__FIRST)   /**< First week in the month */
+ 195:Generated_Source\PSoC4/RTC.h **** #define RTC_SECOND     (RTC__SECOND)  /**< Second week in the month  */
+ 196:Generated_Source\PSoC4/RTC.h **** #define RTC_THIRD      (RTC__THIRD)   /**< Third week in the month  */
+ 197:Generated_Source\PSoC4/RTC.h **** #define RTC_FOURTH     (RTC__FOURTH)  /**< Fourth week in the month  */
+ 198:Generated_Source\PSoC4/RTC.h **** #define RTC_FIFTH      (RTC__FIFTH)   /**< Fifth week in the month  */
+ 199:Generated_Source\PSoC4/RTC.h **** #define RTC_LAST       (RTC__LAST)    /**< Last week in the month  */
+ 200:Generated_Source\PSoC4/RTC.h **** /** \} group_rtc_dst_week_of_month */
+ 201:Generated_Source\PSoC4/RTC.h **** 
+ 202:Generated_Source\PSoC4/RTC.h **** /**
+ 203:Generated_Source\PSoC4/RTC.h **** * \defgroup group_rtc_month Month definitions
+ 204:Generated_Source\PSoC4/RTC.h **** * \{
+ 205:Generated_Source\PSoC4/RTC.h **** * Constants definition for Months
+ 206:Generated_Source\PSoC4/RTC.h **** */
+ 207:Generated_Source\PSoC4/RTC.h **** #define RTC_JANUARY    (RTC__JAN)    /**< Sequential number of January in the year */
+ 208:Generated_Source\PSoC4/RTC.h **** #define RTC_FEBRUARY   (RTC__FEB)    /**< Sequential number of February in the year */
+ 209:Generated_Source\PSoC4/RTC.h **** #define RTC_MARCH      (RTC__MAR)    /**< Sequential number of March in the year */
+ 210:Generated_Source\PSoC4/RTC.h **** #define RTC_APRIL      (RTC__APR)    /**< Sequential number of April in the year */
+ 211:Generated_Source\PSoC4/RTC.h **** #define RTC_MAY        (RTC__MAY)    /**< Sequential number of May in the year */
+ 212:Generated_Source\PSoC4/RTC.h **** #define RTC_JUNE       (RTC__JUN)    /**< Sequential number of June in the year */
+ 213:Generated_Source\PSoC4/RTC.h **** #define RTC_JULY       (RTC__JUL)    /**< Sequential number of July in the year */
+ 214:Generated_Source\PSoC4/RTC.h **** #define RTC_AUGUST     (RTC__AUG)    /**< Sequential number of August in the year */
+ 215:Generated_Source\PSoC4/RTC.h **** #define RTC_SEPTEMBER  (RTC__SEP)    /**< Sequential number of September in the year */
+ 216:Generated_Source\PSoC4/RTC.h **** #define RTC_OCTOBER    (RTC__OCT)    /**< Sequential number of October in the year */
+ 217:Generated_Source\PSoC4/RTC.h **** #define RTC_NOVEMBER   (RTC__NOV)    /**< Sequential number of November in the year */
+ 218:Generated_Source\PSoC4/RTC.h **** #define RTC_DECEMBER   (RTC__DEC)    /**< Sequential number of December in the year */
+ 219:Generated_Source\PSoC4/RTC.h **** /** \} group_rtc_month */
+ 220:Generated_Source\PSoC4/RTC.h **** 
+ 221:Generated_Source\PSoC4/RTC.h **** /**
+ 222:Generated_Source\PSoC4/RTC.h **** * \defgroup group_rtc_am_pm AM/PM status definitions
+ 223:Generated_Source\PSoC4/RTC.h **** * \{
+ 224:Generated_Source\PSoC4/RTC.h **** * Definitions for 12 hour format for indicating the AM/PM period of day
+ 225:Generated_Source\PSoC4/RTC.h **** */
+ 226:Generated_Source\PSoC4/RTC.h **** #define RTC_AM                 (0u)    /**< AM period of day */
+ 227:Generated_Source\PSoC4/RTC.h **** #define RTC_PM                 (1u)    /**< PM period of day */
+ 228:Generated_Source\PSoC4/RTC.h **** /** \} group_rtc_am_pm */
+ 229:Generated_Source\PSoC4/RTC.h **** 
+ 230:Generated_Source\PSoC4/RTC.h **** /**
+ 231:Generated_Source\PSoC4/RTC.h **** * \defgroup group_rtc_hour_format Hour format definitions
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 10
+
+
+ 232:Generated_Source\PSoC4/RTC.h **** * \{
+ 233:Generated_Source\PSoC4/RTC.h **** * Definitions for hour format
+ 234:Generated_Source\PSoC4/RTC.h **** */
+ 235:Generated_Source\PSoC4/RTC.h **** #define RTC_12_HOURS_FORMAT    (RTC__HOUR_12) /**< The 12 hour (AM/PM) format */
+ 236:Generated_Source\PSoC4/RTC.h **** #define RTC_24_HOURS_FORMAT    (RTC__HOUR_24) /**< The 24 hour format */
+ 237:Generated_Source\PSoC4/RTC.h **** /** \} group_rtc_hour_format */
+ 238:Generated_Source\PSoC4/RTC.h **** 
+ 239:Generated_Source\PSoC4/RTC.h **** /**
+ 240:Generated_Source\PSoC4/RTC.h **** * \defgroup group_rtc_days_in_month Number of days in month definitions
+ 241:Generated_Source\PSoC4/RTC.h **** * \{
+ 242:Generated_Source\PSoC4/RTC.h **** * Definition of days in current month
+ 243:Generated_Source\PSoC4/RTC.h **** */
+ 244:Generated_Source\PSoC4/RTC.h **** #define RTC_DAYS_IN_JANUARY     (31u)    /**< Number of days in January  */
+ 245:Generated_Source\PSoC4/RTC.h **** #define RTC_DAYS_IN_FEBRUARY    (28u)    /**< Number of days in February */
+ 246:Generated_Source\PSoC4/RTC.h **** #define RTC_DAYS_IN_MARCH       (31u)    /**< Number of days in March */
+ 247:Generated_Source\PSoC4/RTC.h **** #define RTC_DAYS_IN_APRIL       (30u)    /**< Number of days in April */
+ 248:Generated_Source\PSoC4/RTC.h **** #define RTC_DAYS_IN_MAY         (31u)    /**< Number of days in May */
+ 249:Generated_Source\PSoC4/RTC.h **** #define RTC_DAYS_IN_JUNE        (30u)    /**< Number of days in June */
+ 250:Generated_Source\PSoC4/RTC.h **** #define RTC_DAYS_IN_JULY        (31u)    /**< Number of days in July */
+ 251:Generated_Source\PSoC4/RTC.h **** #define RTC_DAYS_IN_AUGUST      (31u)    /**< Number of days in August */
+ 252:Generated_Source\PSoC4/RTC.h **** #define RTC_DAYS_IN_SEPTEMBER   (30u)    /**< Number of days in September */
+ 253:Generated_Source\PSoC4/RTC.h **** #define RTC_DAYS_IN_OCTOBER     (31u)    /**< Number of days in October */
+ 254:Generated_Source\PSoC4/RTC.h **** #define RTC_DAYS_IN_NOVEMBER    (30u)    /**< Number of days in November */
+ 255:Generated_Source\PSoC4/RTC.h **** #define RTC_DAYS_IN_DECEMBER    (31u)    /**< Number of days in December */
+ 256:Generated_Source\PSoC4/RTC.h **** /** \} group_rtc_days_in_month */
+ 257:Generated_Source\PSoC4/RTC.h **** 
+ 258:Generated_Source\PSoC4/RTC.h **** /**
+ 259:Generated_Source\PSoC4/RTC.h **** * \defgroup group_rtc_status Definitions of the RTC status values
+ 260:Generated_Source\PSoC4/RTC.h **** * \{
+ 261:Generated_Source\PSoC4/RTC.h **** * Definitions for status software register, which has flags for DST (DST),
+ 262:Generated_Source\PSoC4/RTC.h **** * Leap Year (LY), AM/PM (AM_PM).
+ 263:Generated_Source\PSoC4/RTC.h **** */
+ 264:Generated_Source\PSoC4/RTC.h **** 
+ 265:Generated_Source\PSoC4/RTC.h **** /** Status of Daylight Saving Time. This bit
+ 266:Generated_Source\PSoC4/RTC.h **** * goes high when the current time and date match the DST time and date and the 
+ 267:Generated_Source\PSoC4/RTC.h **** * time is incremented. This bit goes low after the DST interval and the time is 
+ 268:Generated_Source\PSoC4/RTC.h **** * decremented.
+ 269:Generated_Source\PSoC4/RTC.h **** */
+ 270:Generated_Source\PSoC4/RTC.h **** #define RTC_STATUS_DST     (1uL << RTC_STATUS_DST_OFFSET)
+ 271:Generated_Source\PSoC4/RTC.h **** 
+ 272:Generated_Source\PSoC4/RTC.h **** /** Status of Leap Year. This bit goes high when the current year is a leap year */
+ 273:Generated_Source\PSoC4/RTC.h **** #define RTC_STATUS_LY      (1uL << RTC_STATUS_LY_OFFSET)
+ 274:Generated_Source\PSoC4/RTC.h **** 
+ 275:Generated_Source\PSoC4/RTC.h **** /** Status of Current Time. This bit is low from midnight to noon and high from 
+ 276:Generated_Source\PSoC4/RTC.h **** *  noon to midnight. */
+ 277:Generated_Source\PSoC4/RTC.h **** #define RTC_STATUS_AM_PM   (1uL << RTC_STATUS_AM_PM_OFFSET)
+ 278:Generated_Source\PSoC4/RTC.h **** /** \} group_rtc_status */
+ 279:Generated_Source\PSoC4/RTC.h **** 
+ 280:Generated_Source\PSoC4/RTC.h **** /**
+ 281:Generated_Source\PSoC4/RTC.h **** * \defgroup group_rtc_alarm_mask Definitions for Alarm Mask software register
+ 282:Generated_Source\PSoC4/RTC.h **** * \{
+ 283:Generated_Source\PSoC4/RTC.h **** * Definitions for Alarm Mask software register. These masks allow 
+ 284:Generated_Source\PSoC4/RTC.h **** * matching the alarm value register with the current value register.
+ 285:Generated_Source\PSoC4/RTC.h **** */
+ 286:Generated_Source\PSoC4/RTC.h **** 
+ 287:Generated_Source\PSoC4/RTC.h **** /** The second alarm mask allows matching the alarm second register with the 
+ 288:Generated_Source\PSoC4/RTC.h **** *   current second register.
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 11
+
+
+ 289:Generated_Source\PSoC4/RTC.h **** */
+ 290:Generated_Source\PSoC4/RTC.h **** #define RTC_ALARM_SEC_MASK         (0x00000001uL)
+ 291:Generated_Source\PSoC4/RTC.h **** 
+ 292:Generated_Source\PSoC4/RTC.h **** /** The minute alarm mask allows matching the alarm minute register with the 
+ 293:Generated_Source\PSoC4/RTC.h **** *   current minute register.
+ 294:Generated_Source\PSoC4/RTC.h **** */
+ 295:Generated_Source\PSoC4/RTC.h **** #define RTC_ALARM_MIN_MASK         (0x00000002uL)
+ 296:Generated_Source\PSoC4/RTC.h **** 
+ 297:Generated_Source\PSoC4/RTC.h **** /** The hour alarm mask allows matching the alarm hour register with the 
+ 298:Generated_Source\PSoC4/RTC.h **** *   current hour register.
+ 299:Generated_Source\PSoC4/RTC.h **** */
+ 300:Generated_Source\PSoC4/RTC.h **** #define RTC_ALARM_HOUR_MASK        (0x00000004uL)
+ 301:Generated_Source\PSoC4/RTC.h **** 
+ 302:Generated_Source\PSoC4/RTC.h **** /** The day of the week alarm mask allows matching the alarm hour register with 
+ 303:Generated_Source\PSoC4/RTC.h **** *   the current day of the week register.
+ 304:Generated_Source\PSoC4/RTC.h **** */
+ 305:Generated_Source\PSoC4/RTC.h **** #define RTC_ALARM_DAYOFWEEK_MASK   (0x00000008uL)
+ 306:Generated_Source\PSoC4/RTC.h **** 
+ 307:Generated_Source\PSoC4/RTC.h **** /** The day of the Month alarm mask allows matching the alarm hour register with 
+ 308:Generated_Source\PSoC4/RTC.h **** *   the current day of the Month register.
+ 309:Generated_Source\PSoC4/RTC.h **** */
+ 310:Generated_Source\PSoC4/RTC.h **** #define RTC_ALARM_DAYOFMONTH_MASK  (0x00000010uL)
+ 311:Generated_Source\PSoC4/RTC.h **** 
+ 312:Generated_Source\PSoC4/RTC.h **** /** The month alarm mask allows matching the alarm hour register with the
+ 313:Generated_Source\PSoC4/RTC.h **** *   current month register.
+ 314:Generated_Source\PSoC4/RTC.h **** */
+ 315:Generated_Source\PSoC4/RTC.h **** #define RTC_ALARM_MONTH_MASK       (0x00000020uL)
+ 316:Generated_Source\PSoC4/RTC.h **** 
+ 317:Generated_Source\PSoC4/RTC.h **** /** The year alarm mask allows matching the alarm hour register with the
+ 318:Generated_Source\PSoC4/RTC.h **** *   current year register.
+ 319:Generated_Source\PSoC4/RTC.h **** */
+ 320:Generated_Source\PSoC4/RTC.h **** #define RTC_ALARM_YEAR_MASK        (0x00000040uL)
+ 321:Generated_Source\PSoC4/RTC.h **** 
+ 322:Generated_Source\PSoC4/RTC.h **** /** \} group_rtc_alarm_mask */
+ 323:Generated_Source\PSoC4/RTC.h **** /** \} group_constants */
+ 324:Generated_Source\PSoC4/RTC.h **** 
+ 325:Generated_Source\PSoC4/RTC.h **** #define RTC_DAYS_PER_WEEK       (7u)
+ 326:Generated_Source\PSoC4/RTC.h **** 
+ 327:Generated_Source\PSoC4/RTC.h **** #define RTC_MONTHS_PER_YEAR     (12uL)
+ 328:Generated_Source\PSoC4/RTC.h **** 
+ 329:Generated_Source\PSoC4/RTC.h **** #define RTC_HOURS_PER_DAY       (24uL)
+ 330:Generated_Source\PSoC4/RTC.h **** #define RTC_HOURS_PER_HALF_DAY  (12uL)
+ 331:Generated_Source\PSoC4/RTC.h **** 
+ 332:Generated_Source\PSoC4/RTC.h **** #define RTC_SECONDS_PER_MINUTE  (60uL)
+ 333:Generated_Source\PSoC4/RTC.h **** #define RTC_SECONDS_PER_HOUR    (3600uL)
+ 334:Generated_Source\PSoC4/RTC.h **** #define RTC_SECONDS_PER_DAY     (24uL * 3600uL)
+ 335:Generated_Source\PSoC4/RTC.h **** 
+ 336:Generated_Source\PSoC4/RTC.h **** #define RTC_SECONDS_PER_LEAP_YEAR    (366uL * 24uL * 3600uL)
+ 337:Generated_Source\PSoC4/RTC.h **** #define RTC_SECONDS_PER_NONLEAP_YEAR (365uL * 24uL * 3600uL)
+ 338:Generated_Source\PSoC4/RTC.h **** 
+ 339:Generated_Source\PSoC4/RTC.h **** #define RTC_UNIX_TIME_PM        ((12uL * 3600uL) + 1uL)
+ 340:Generated_Source\PSoC4/RTC.h **** 
+ 341:Generated_Source\PSoC4/RTC.h **** /* Unix time begins in 1970 year */
+ 342:Generated_Source\PSoC4/RTC.h **** #define RTC_YEAR_0             (1970u)
+ 343:Generated_Source\PSoC4/RTC.h **** 
+ 344:Generated_Source\PSoC4/RTC.h **** /* Definition of date register fields */
+ 345:Generated_Source\PSoC4/RTC.h **** #if(RTC_INITIAL_DATA_FORMAT == RTC__MM_DD_YYYY)
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 12
+
+
+ 346:Generated_Source\PSoC4/RTC.h ****     #define RTC_10_MONTH_OFFSET   (28u)
+ 347:Generated_Source\PSoC4/RTC.h ****     #define RTC_MONTH_OFFSET      (24u)
+ 348:Generated_Source\PSoC4/RTC.h ****     #define RTC_10_DAY_OFFSET     (20u)
+ 349:Generated_Source\PSoC4/RTC.h ****     #define RTC_DAY_OFFSET        (16u)
+ 350:Generated_Source\PSoC4/RTC.h ****     #define RTC_1000_YEAR_OFFSET  (12u)
+ 351:Generated_Source\PSoC4/RTC.h ****     #define RTC_100_YEAR_OFFSET   (8u)
+ 352:Generated_Source\PSoC4/RTC.h ****     #define RTC_10_YEAR_OFFSET    (4u)
+ 353:Generated_Source\PSoC4/RTC.h ****     #define RTC_YEAR_OFFSET       (0u)
+ 354:Generated_Source\PSoC4/RTC.h **** #elif(RTC_INITIAL_DATA_FORMAT == RTC__DD_MM_YYYY)
+ 355:Generated_Source\PSoC4/RTC.h ****     #define RTC_10_MONTH_OFFSET   (20u)
+ 356:Generated_Source\PSoC4/RTC.h ****     #define RTC_MONTH_OFFSET      (16u)
+ 357:Generated_Source\PSoC4/RTC.h ****     #define RTC_10_DAY_OFFSET     (28u)
+ 358:Generated_Source\PSoC4/RTC.h ****     #define RTC_DAY_OFFSET        (24u)
+ 359:Generated_Source\PSoC4/RTC.h ****     #define RTC_1000_YEAR_OFFSET  (12u)
+ 360:Generated_Source\PSoC4/RTC.h ****     #define RTC_100_YEAR_OFFSET   (8u)
+ 361:Generated_Source\PSoC4/RTC.h ****     #define RTC_10_YEAR_OFFSET    (4u)
+ 362:Generated_Source\PSoC4/RTC.h ****     #define RTC_YEAR_OFFSET       (0u)
+ 363:Generated_Source\PSoC4/RTC.h **** #else
+ 364:Generated_Source\PSoC4/RTC.h ****     #define RTC_10_MONTH_OFFSET   (12u)
+ 365:Generated_Source\PSoC4/RTC.h ****     #define RTC_MONTH_OFFSET      (8u)
+ 366:Generated_Source\PSoC4/RTC.h ****     #define RTC_10_DAY_OFFSET     (4u)
+ 367:Generated_Source\PSoC4/RTC.h ****     #define RTC_DAY_OFFSET        (0u)
+ 368:Generated_Source\PSoC4/RTC.h ****     #define RTC_1000_YEAR_OFFSET  (28u)
+ 369:Generated_Source\PSoC4/RTC.h ****     #define RTC_100_YEAR_OFFSET   (24u)
+ 370:Generated_Source\PSoC4/RTC.h ****     #define RTC_10_YEAR_OFFSET    (20u)
+ 371:Generated_Source\PSoC4/RTC.h ****     #define RTC_YEAR_OFFSET       (16u)
+ 372:Generated_Source\PSoC4/RTC.h **** #endif /* (RTC_INITIAL_DATA_FORMAT == RTC__MM_DD_YYYY) */
+ 373:Generated_Source\PSoC4/RTC.h **** 
+ 374:Generated_Source\PSoC4/RTC.h **** #define RTC_10_MONTH_MASK          (0x00000001uL << RTC_10_MONTH_OFFSET)
+ 375:Generated_Source\PSoC4/RTC.h **** #define RTC_MONTH_MASK             (0x0000000FuL << RTC_MONTH_OFFSET)
+ 376:Generated_Source\PSoC4/RTC.h **** #define RTC_10_DAY_MASK            (0x00000003uL << RTC_10_DAY_OFFSET)
+ 377:Generated_Source\PSoC4/RTC.h **** #define RTC_DAY_MASK               (0x0000000FuL << RTC_DAY_OFFSET)
+ 378:Generated_Source\PSoC4/RTC.h **** #define RTC_1000_YEAR_MASK         (0x00000003uL << RTC_1000_YEAR_OFFSET)
+ 379:Generated_Source\PSoC4/RTC.h **** #define RTC_100_YEAR_MASK          (0x0000000FuL << RTC_100_YEAR_OFFSET)
+ 380:Generated_Source\PSoC4/RTC.h **** #define RTC_10_YEAR_MASK           (0x0000000FuL << RTC_10_YEAR_OFFSET)
+ 381:Generated_Source\PSoC4/RTC.h **** #define RTC_YEAR_MASK              (0x0000000FuL << RTC_YEAR_OFFSET)
+ 382:Generated_Source\PSoC4/RTC.h **** 
+ 383:Generated_Source\PSoC4/RTC.h **** #define  RTC_MONTH_FULL_MASK       (RTC_10_MONTH_MASK  | RTC_MONTH_MASK)
+ 384:Generated_Source\PSoC4/RTC.h **** #define  RTC_DAY_FULL_MASK         (RTC_10_DAY_MASK    | RTC_DAY_MASK)
+ 385:Generated_Source\PSoC4/RTC.h **** #define  RTC_YEAR_FULL_MASK        (RTC_1000_YEAR_MASK | RTC_100_YEAR_MASK |\
+ 386:Generated_Source\PSoC4/RTC.h ****                                                  RTC_10_YEAR_MASK   | RTC_YEAR_MASK)
+ 387:Generated_Source\PSoC4/RTC.h **** 
+ 388:Generated_Source\PSoC4/RTC.h **** /* Definition of time register fields */
+ 389:Generated_Source\PSoC4/RTC.h **** #define RTC_TIME_FORMAT_OFFSET     (23u)
+ 390:Generated_Source\PSoC4/RTC.h **** #define RTC_PERIOD_OF_DAY_OFFSET   (22u)
+ 391:Generated_Source\PSoC4/RTC.h **** #define RTC_10_HOURS_OFFSET        (20u)
+ 392:Generated_Source\PSoC4/RTC.h **** #define RTC_HOURS_OFFSET           (16u)
+ 393:Generated_Source\PSoC4/RTC.h **** #define RTC_10_MINUTES_OFFSET      (12u)
+ 394:Generated_Source\PSoC4/RTC.h **** #define RTC_MINUTES_OFFSET         (8u)
+ 395:Generated_Source\PSoC4/RTC.h **** #define RTC_10_SECONDS_OFFSET      (4u)
+ 396:Generated_Source\PSoC4/RTC.h **** #define RTC_SECONDS_OFFSET         (0u)
+ 397:Generated_Source\PSoC4/RTC.h **** 
+ 398:Generated_Source\PSoC4/RTC.h **** #define RTC_TIME_FORMAT_MASK       (0x00000001uL << RTC_TIME_FORMAT_OFFSET)
+ 399:Generated_Source\PSoC4/RTC.h **** #define RTC_PERIOD_OF_DAY_MASK     (0x00000001uL << RTC_PERIOD_OF_DAY_OFFSET)
+ 400:Generated_Source\PSoC4/RTC.h **** #define RTC_10_HOURS_MASK          (0x00000003uL << RTC_10_HOURS_OFFSET)
+ 401:Generated_Source\PSoC4/RTC.h **** #define RTC_HOURS_MASK             (0x0000000FuL << RTC_HOURS_OFFSET)
+ 402:Generated_Source\PSoC4/RTC.h **** #define RTC_10_MINUTES_MASK        (0x00000007uL << RTC_10_MINUTES_OFFSET)
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 13
+
+
+ 403:Generated_Source\PSoC4/RTC.h **** #define RTC_MINUTES_MASK           (0x0000000FuL << RTC_MINUTES_OFFSET)
+ 404:Generated_Source\PSoC4/RTC.h **** #define RTC_10_SECONDS_MASK        (0x00000007uL << RTC_10_SECONDS_OFFSET)
+ 405:Generated_Source\PSoC4/RTC.h **** #define RTC_SECONDS_MASK           (0x0000000FuL << RTC_SECONDS_OFFSET)
+ 406:Generated_Source\PSoC4/RTC.h **** 
+ 407:Generated_Source\PSoC4/RTC.h **** #define RTC_HOURS_FULL_MASK        (RTC_10_HOURS_MASK   | RTC_HOURS_MASK)
+ 408:Generated_Source\PSoC4/RTC.h **** #define RTC_MINUTES_FULL_MASK      (RTC_10_MINUTES_MASK | RTC_MINUTES_MASK)
+ 409:Generated_Source\PSoC4/RTC.h **** #define RTC_SECONDS_FULL_MASK      (RTC_10_SECONDS_MASK | RTC_SECONDS_MASK)
+ 410:Generated_Source\PSoC4/RTC.h **** 
+ 411:Generated_Source\PSoC4/RTC.h **** #define RTC_STATUS_DST_OFFSET      (1u)
+ 412:Generated_Source\PSoC4/RTC.h **** #define RTC_STATUS_ALARM_OFFSET    (2u)
+ 413:Generated_Source\PSoC4/RTC.h **** #define RTC_STATUS_LY_OFFSET       (3u)
+ 414:Generated_Source\PSoC4/RTC.h **** #define RTC_STATUS_AM_PM_OFFSET    (4u)
+ 415:Generated_Source\PSoC4/RTC.h **** 
+ 416:Generated_Source\PSoC4/RTC.h **** /* Number of bits per one BCD digit */
+ 417:Generated_Source\PSoC4/RTC.h **** #define RTC_BCD_NUMBER_SIZE        (4u)
+ 418:Generated_Source\PSoC4/RTC.h **** #define RTC_BCD_ONE_DIGIT_MASK     (0x0000000FuL)
+ 419:Generated_Source\PSoC4/RTC.h **** 
+ 420:Generated_Source\PSoC4/RTC.h **** 
+ 421:Generated_Source\PSoC4/RTC.h **** /*******************************************************************************
+ 422:Generated_Source\PSoC4/RTC.h **** *    External Variables
+ 423:Generated_Source\PSoC4/RTC.h **** *******************************************************************************/
+ 424:Generated_Source\PSoC4/RTC.h **** /**
+ 425:Generated_Source\PSoC4/RTC.h **** * \addtogroup group_globals
+ 426:Generated_Source\PSoC4/RTC.h **** * \{
+ 427:Generated_Source\PSoC4/RTC.h **** */
+ 428:Generated_Source\PSoC4/RTC.h **** 
+ 429:Generated_Source\PSoC4/RTC.h **** /**
+ 430:Generated_Source\PSoC4/RTC.h **** * Indicates whether the RTC has been initialized; The variable is initialized to
+ 431:Generated_Source\PSoC4/RTC.h **** * 0 and set to 1 the first time RTC_Start() is called. This allows the component
+ 432:Generated_Source\PSoC4/RTC.h **** * to restart without reinitialization after the first call to the RTC_Start() 
+ 433:Generated_Source\PSoC4/RTC.h **** * routine.
+ 434:Generated_Source\PSoC4/RTC.h **** */
+ 435:Generated_Source\PSoC4/RTC.h **** extern uint8  RTC_initVar;
+ 436:Generated_Source\PSoC4/RTC.h **** 
+ 437:Generated_Source\PSoC4/RTC.h **** /** The DST start/stop status */
+ 438:Generated_Source\PSoC4/RTC.h **** extern uint8  RTC_dstStatus;
+ 439:Generated_Source\PSoC4/RTC.h **** 
+ 440:Generated_Source\PSoC4/RTC.h **** /**
+ 441:Generated_Source\PSoC4/RTC.h **** * The uint64 variable represents the standard Unix time (number of seconds 
+ 442:Generated_Source\PSoC4/RTC.h **** * elapsed from January 1, 1970 00:00 hours UTC) in 64-bit 
+ 443:Generated_Source\PSoC4/RTC.h **** */
+ 444:Generated_Source\PSoC4/RTC.h **** extern volatile uint64 RTC_unixTime;
+ 445:Generated_Source\PSoC4/RTC.h **** 
+ 446:Generated_Source\PSoC4/RTC.h **** /** The values for the time and date of the DST start */
+ 447:Generated_Source\PSoC4/RTC.h **** extern RTC_DST_TIME RTC_dstStartTime;
+ 448:Generated_Source\PSoC4/RTC.h **** 
+ 449:Generated_Source\PSoC4/RTC.h **** /** The values for the time and date of the DST stop */
+ 450:Generated_Source\PSoC4/RTC.h **** extern RTC_DST_TIME RTC_dstStopTime;
+ 451:Generated_Source\PSoC4/RTC.h **** 
+ 452:Generated_Source\PSoC4/RTC.h **** /**
+ 453:Generated_Source\PSoC4/RTC.h **** * The last updated time and date values are stored in this structure (update 
+ 454:Generated_Source\PSoC4/RTC.h **** * happens in Get time/date APIs)
+ 455:Generated_Source\PSoC4/RTC.h **** */
+ 456:Generated_Source\PSoC4/RTC.h **** extern RTC_DATE_TIME RTC_currentTimeDate;
+ 457:Generated_Source\PSoC4/RTC.h **** 
+ 458:Generated_Source\PSoC4/RTC.h **** /** The alarm time and date values are stored in this variable */
+ 459:Generated_Source\PSoC4/RTC.h **** extern RTC_DATE_TIME RTC_alarmCfgTimeDate;
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 14
+
+
+ 460:Generated_Source\PSoC4/RTC.h **** 
+ 461:Generated_Source\PSoC4/RTC.h **** /**
+ 462:Generated_Source\PSoC4/RTC.h **** * This variable is used to mask alarm events; mask seconds alarm, mask minutes 
+ 463:Generated_Source\PSoC4/RTC.h **** * alarm, and so on. It will have bit masks for each time item masking that item 
+ 464:Generated_Source\PSoC4/RTC.h **** * for alarm generation
+ 465:Generated_Source\PSoC4/RTC.h **** */
+ 466:Generated_Source\PSoC4/RTC.h **** extern uint32  RTC_alarmCfgMask;
+ 467:Generated_Source\PSoC4/RTC.h **** 
+ 468:Generated_Source\PSoC4/RTC.h **** /**
+ 469:Generated_Source\PSoC4/RTC.h **** * This variable is used to indicate current active alarm status per time item 
+ 470:Generated_Source\PSoC4/RTC.h **** * used in the alarm; whether seconds alarm is active, minute's alarm is active, 
+ 471:Generated_Source\PSoC4/RTC.h **** * and so on. It will have bit masks for each time item (seconds, minutes, hours,
+ 472:Generated_Source\PSoC4/RTC.h **** * day, and so on) showing the status
+ 473:Generated_Source\PSoC4/RTC.h **** */
+ 474:Generated_Source\PSoC4/RTC.h **** extern uint32 RTC_alarmCurStatus;
+ 475:Generated_Source\PSoC4/RTC.h **** 
+ 476:Generated_Source\PSoC4/RTC.h **** /** \} group_globals */
+ 477:Generated_Source\PSoC4/RTC.h **** 
+ 478:Generated_Source\PSoC4/RTC.h **** extern void (*RTC_alarmCallbackPtr)(void);
+ 479:Generated_Source\PSoC4/RTC.h **** 
+ 480:Generated_Source\PSoC4/RTC.h **** extern const uint16 RTC_daysBeforeMonthTbl[RTC_MONTHS_PER_YEAR];
+ 481:Generated_Source\PSoC4/RTC.h **** extern const uint8  RTC_daysInMonthTbl[RTC_MONTHS_PER_YEAR];
+ 482:Generated_Source\PSoC4/RTC.h **** 
+ 483:Generated_Source\PSoC4/RTC.h **** 
+ 484:Generated_Source\PSoC4/RTC.h **** /*******************************************************************************
+ 485:Generated_Source\PSoC4/RTC.h **** *    Function Prototypes
+ 486:Generated_Source\PSoC4/RTC.h **** *******************************************************************************/
+ 487:Generated_Source\PSoC4/RTC.h **** /**
+ 488:Generated_Source\PSoC4/RTC.h **** * \addtogroup group_general
+ 489:Generated_Source\PSoC4/RTC.h **** * \{
+ 490:Generated_Source\PSoC4/RTC.h **** */
+ 491:Generated_Source\PSoC4/RTC.h **** void   RTC_Start(void);
+ 492:Generated_Source\PSoC4/RTC.h **** void   RTC_Stop(void);
+ 493:Generated_Source\PSoC4/RTC.h **** void   RTC_Init(void);
+ 494:Generated_Source\PSoC4/RTC.h **** void   RTC_SetUnixTime(uint64 unixTime);
+ 495:Generated_Source\PSoC4/RTC.h **** uint64 RTC_GetUnixTime(void);
+ 496:Generated_Source\PSoC4/RTC.h **** void   RTC_SetPeriod(uint32 ticks, uint32 refOneSecTicks);
+ 497:Generated_Source\PSoC4/RTC.h **** uint32 RTC_GetPeriod(void);
+ 498:Generated_Source\PSoC4/RTC.h **** uint32 RTC_GetRefOneSec(void);
+ 499:Generated_Source\PSoC4/RTC.h **** void   RTC_SetDateAndTime(uint32 inputTime, uint32 inputDate);
+ 500:Generated_Source\PSoC4/RTC.h **** void   RTC_GetDateAndTime(RTC_DATE_TIME* dateTime);
+ 501:Generated_Source\PSoC4/RTC.h **** uint32 RTC_GetTime(void);
+ 502:Generated_Source\PSoC4/RTC.h **** uint32 RTC_GetDate(void);
+ 503:Generated_Source\PSoC4/RTC.h **** void   RTC_SetAlarmDateAndTime(const RTC_DATE_TIME* alarmTime);
+ 504:Generated_Source\PSoC4/RTC.h **** void   RTC_GetAlarmDateAndTime(RTC_DATE_TIME* alarmTimeDate);
+ 505:Generated_Source\PSoC4/RTC.h **** void   RTC_SetAlarmMask(uint32 mask);
+ 506:Generated_Source\PSoC4/RTC.h **** uint32 RTC_GetAlarmMask(void);
+ 507:Generated_Source\PSoC4/RTC.h **** uint32 RTC_ReadStatus(void);
+ 508:Generated_Source\PSoC4/RTC.h **** uint32 RTC_GetAlarmStatus(void);
+ 509:Generated_Source\PSoC4/RTC.h **** void   RTC_ClearAlarmStatus(void);
+ 510:Generated_Source\PSoC4/RTC.h **** void   RTC_SetDSTStartTime(const RTC_DST_TIME* dstStartTime,
+ 511:Generated_Source\PSoC4/RTC.h ****                                               RTC_DST_DATETYPE_ENUM type);
+ 512:Generated_Source\PSoC4/RTC.h **** void   RTC_SetDSTStopTime(const RTC_DST_TIME* dstStopTime,
+ 513:Generated_Source\PSoC4/RTC.h ****                                              RTC_DST_DATETYPE_ENUM type);
+ 514:Generated_Source\PSoC4/RTC.h **** uint32 RTC_ConvertBCDToDec(uint32 bcdNum);
+ 515:Generated_Source\PSoC4/RTC.h **** uint32 RTC_ConvertDecToBCD(uint32 decNum);
+ 516:Generated_Source\PSoC4/RTC.h **** void   RTC_Update(void);
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 15
+
+
+ 517:Generated_Source\PSoC4/RTC.h **** void*  RTC_SetAlarmHandler(void (*CallbackFunction)(void));
+ 518:Generated_Source\PSoC4/RTC.h **** 
+ 519:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_ConstructDate(uint32 month, uint32 day, uint32 year);
+ 520:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_ConstructTime(uint32 timeFormat, uint32 stateAmPm, uint32 hour, uint32 min, uint3
+ 521:Generated_Source\PSoC4/RTC.h **** /** \} group_general */
+ 522:Generated_Source\PSoC4/RTC.h **** 
+ 523:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_GetTimeFormat(uint32 inputTime);
+ 524:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_SetTimeFormat(uint32 inputTime, uint32 timeFormat);
+ 525:Generated_Source\PSoC4/RTC.h **** 
+ 526:Generated_Source\PSoC4/RTC.h **** /**
+ 527:Generated_Source\PSoC4/RTC.h **** * \addtogroup group_general
+ 528:Generated_Source\PSoC4/RTC.h **** * \{
+ 529:Generated_Source\PSoC4/RTC.h **** */
+ 530:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_LeapYear(uint32 year);
+ 531:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_IsBitSet(uint32 var, uint32 mask);
+ 532:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_GetSecond(uint32 inputTime);
+ 533:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_GetMinutes(uint32 inputTime);
+ 534:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_GetHours(uint32 inputTime);
+ 535:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_GetAmPm(uint32 inputTime);
+ 536:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_GetDay(uint32 date);
+ 537:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_GetMonth(uint32 date);
+ 538:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_GetYear(uint32 date);
+ 539:Generated_Source\PSoC4/RTC.h **** /** \} group_general */
+ 540:Generated_Source\PSoC4/RTC.h **** 
+ 541:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_SetSecond(uint32 inputTime, uint32 inputSecond);
+ 542:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_SetMinutes(uint32 inputTime, uint32 inputMinute);
+ 543:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_SetHours(uint32 inputTime, uint32 inputHours);
+ 544:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_SetAmPm(uint32 inputTime, uint32 periodOfDay);
+ 545:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_SetDay(uint32 inputDate, uint32 inputDay);
+ 546:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_SetMonth(uint32 inputDate, uint32 inputMonth);
+ 547:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_SetYear(uint32 inputDate, uint32 inputYear);
+ 548:Generated_Source\PSoC4/RTC.h **** 
+ 549:Generated_Source\PSoC4/RTC.h **** uint64 RTC_ConstructUnixAlarmTime(const RTC_DATE_TIME* alarmTime, uint8 alarmCfgMask);
+ 550:Generated_Source\PSoC4/RTC.h **** uint64 RTC_GetDstUnixTime(const RTC_DST_TIME* dstTime);
+ 551:Generated_Source\PSoC4/RTC.h **** uint64 RTC_GetNexAlarmTime(uint64 curUnixTime, uint8 alarmCfgMask);
+ 552:Generated_Source\PSoC4/RTC.h **** 
+ 553:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_GetNextMinSec(uint32 curVal);
+ 554:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_GetNextHour(uint32 curVal);
+ 555:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_GetNextDay(uint32 curYear, uint32 curMonth, uint32 curDay, uint32 alarmCfgMask);
+ 556:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_GetNextMonth(uint32 curMonth);
+ 557:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_GetNextYear(uint32 curYear);
+ 558:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_GetDayOfWeek(uint32 day, uint32 month, uint32 year);
+ 559:Generated_Source\PSoC4/RTC.h **** static uint32 RTC_DaysBeforeMonth(uint32 month, uint32 year);
+ 560:Generated_Source\PSoC4/RTC.h **** 
+ 561:Generated_Source\PSoC4/RTC.h **** uint32 RTC_DaysInMonth(uint32 month, uint32 year);
+ 562:Generated_Source\PSoC4/RTC.h **** 
+ 563:Generated_Source\PSoC4/RTC.h **** /**
+ 564:Generated_Source\PSoC4/RTC.h **** * \addtogroup group_general
+ 565:Generated_Source\PSoC4/RTC.h **** * \{
+ 566:Generated_Source\PSoC4/RTC.h **** */
+ 567:Generated_Source\PSoC4/RTC.h **** void   RTC_UnixToDateTime(RTC_DATE_TIME* dateTime, uint64 unixTime, uint32 timeFormat);
+ 568:Generated_Source\PSoC4/RTC.h **** uint64 RTC_DateTimeToUnix(uint32 inputDate, uint32 inputTime);
+ 569:Generated_Source\PSoC4/RTC.h **** 
+ 570:Generated_Source\PSoC4/RTC.h **** #if defined(CYDEV_RTC_SOURCE_WDT)
+ 571:Generated_Source\PSoC4/RTC.h ****     #if((0u != CYDEV_WDT_GENERATE_ISR) && (0u == RTC_INITIAL_UPDATE_MODE))
+ 572:Generated_Source\PSoC4/RTC.h ****         static void RTC_CySysRtcSetCallback(uint32 wdtNumber);
+ 573:Generated_Source\PSoC4/RTC.h ****         static void RTC_CySysRtcResetCallback(uint32 wdtNumber);
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 16
+
+
+ 574:Generated_Source\PSoC4/RTC.h ****     #endif /* ((0u != CYDEV_WDT_GENERATE_ISR) && (0u == RTC_INITIAL_UPDATE_MODE)) */
+ 575:Generated_Source\PSoC4/RTC.h **** #endif /* (CYDEV_RTC_SOURCE_WDT) */
+ 576:Generated_Source\PSoC4/RTC.h **** 
+ 577:Generated_Source\PSoC4/RTC.h **** /** \} group_general */
+ 578:Generated_Source\PSoC4/RTC.h **** 
+ 579:Generated_Source\PSoC4/RTC.h **** uint32 RTC_RelativeToFixed(uint32 dayOfWeek, uint32 weekOfMonth, uint32 month, uint32 year);
+ 580:Generated_Source\PSoC4/RTC.h **** 
+ 581:Generated_Source\PSoC4/RTC.h **** 
+ 582:Generated_Source\PSoC4/RTC.h **** 
+ 583:Generated_Source\PSoC4/RTC.h **** /*******************************************************************************
+ 584:Generated_Source\PSoC4/RTC.h **** * Function Name: RTC_IsBitSet
+ 585:Generated_Source\PSoC4/RTC.h **** ****************************************************************************//**
+ 586:Generated_Source\PSoC4/RTC.h **** *
+ 587:Generated_Source\PSoC4/RTC.h **** * Checks the state of a bit passed through parameter.
+ 588:Generated_Source\PSoC4/RTC.h **** *
+ 589:Generated_Source\PSoC4/RTC.h **** * \param var
+ 590:Generated_Source\PSoC4/RTC.h **** * The variable to be checked.
+ 591:Generated_Source\PSoC4/RTC.h **** *
+ 592:Generated_Source\PSoC4/RTC.h **** * \param mask
+ 593:Generated_Source\PSoC4/RTC.h **** * The mask for a bit to be checked.
+ 594:Generated_Source\PSoC4/RTC.h **** *
+ 595:Generated_Source\PSoC4/RTC.h **** * \return
+ 596:Generated_Source\PSoC4/RTC.h **** *  0u - Bit is not set. <br> 1u - Bit is set.
+ 597:Generated_Source\PSoC4/RTC.h **** *
+ 598:Generated_Source\PSoC4/RTC.h **** *******************************************************************************/
+ 599:Generated_Source\PSoC4/RTC.h **** static CY_INLINE uint32 RTC_IsBitSet(uint32 var, uint32 mask)
+ 600:Generated_Source\PSoC4/RTC.h **** {
+ 601:Generated_Source\PSoC4/RTC.h ****     return ((mask == (var & mask)) ? 1Lu : 0Lu);
+ 602:Generated_Source\PSoC4/RTC.h **** }
+ 603:Generated_Source\PSoC4/RTC.h **** 
+ 604:Generated_Source\PSoC4/RTC.h **** 
+ 605:Generated_Source\PSoC4/RTC.h **** /*******************************************************************************
+ 606:Generated_Source\PSoC4/RTC.h **** * Function Name: RTC_LeapYear
+ 607:Generated_Source\PSoC4/RTC.h **** ****************************************************************************//**
+ 608:Generated_Source\PSoC4/RTC.h **** *
+ 609:Generated_Source\PSoC4/RTC.h **** * Checks whether the year passed through the parameter is leap or no.
+ 610:Generated_Source\PSoC4/RTC.h **** *
+ 611:Generated_Source\PSoC4/RTC.h **** * \param year
+ 612:Generated_Source\PSoC4/RTC.h **** * The year to be checked.
+ 613:Generated_Source\PSoC4/RTC.h **** *
+ 614:Generated_Source\PSoC4/RTC.h **** * \return
+ 615:Generated_Source\PSoC4/RTC.h **** * 0u - The year is not leap <br> 1u - The year is leap.
+ 616:Generated_Source\PSoC4/RTC.h **** *
+ 617:Generated_Source\PSoC4/RTC.h **** *******************************************************************************/
+ 618:Generated_Source\PSoC4/RTC.h **** static CY_INLINE uint32 RTC_LeapYear(uint32 year)
+ 619:Generated_Source\PSoC4/RTC.h **** {
+ 620:Generated_Source\PSoC4/RTC.h ****     uint32 retVal;
+ 621:Generated_Source\PSoC4/RTC.h **** 
+ 622:Generated_Source\PSoC4/RTC.h ****     if(((0u == (year % 4Lu)) && (0u != (year % 100Lu))) || (0u == (year % 400Lu)))
+ 623:Generated_Source\PSoC4/RTC.h ****     {
+ 624:Generated_Source\PSoC4/RTC.h ****         retVal = 1uL;
+ 625:Generated_Source\PSoC4/RTC.h ****     }
+ 626:Generated_Source\PSoC4/RTC.h ****     else
+ 627:Generated_Source\PSoC4/RTC.h ****     {
+ 628:Generated_Source\PSoC4/RTC.h ****         retVal = 0uL;
+ 629:Generated_Source\PSoC4/RTC.h ****     }
+ 630:Generated_Source\PSoC4/RTC.h **** 
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 17
+
+
+ 631:Generated_Source\PSoC4/RTC.h ****     return(retVal);
+ 632:Generated_Source\PSoC4/RTC.h **** }
+ 633:Generated_Source\PSoC4/RTC.h **** 
+ 634:Generated_Source\PSoC4/RTC.h **** 
+ 635:Generated_Source\PSoC4/RTC.h **** /*******************************************************************************
+ 636:Generated_Source\PSoC4/RTC.h **** * Function Name: RTC_GetSecond
+ 637:Generated_Source\PSoC4/RTC.h **** ****************************************************************************//**
+ 638:Generated_Source\PSoC4/RTC.h **** *
+ 639:Generated_Source\PSoC4/RTC.h **** * Returns the seconds value from the time value that is passed as a/the 
+ 640:Generated_Source\PSoC4/RTC.h **** * parameter.
+ 641:Generated_Source\PSoC4/RTC.h **** *
+ 642:Generated_Source\PSoC4/RTC.h **** * \param inputTime
+ 643:Generated_Source\PSoC4/RTC.h **** * The time value.
+ 644:Generated_Source\PSoC4/RTC.h **** *
+ 645:Generated_Source\PSoC4/RTC.h **** * \return
+ 646:Generated_Source\PSoC4/RTC.h **** * The seconds value.
+ 647:Generated_Source\PSoC4/RTC.h **** *
+ 648:Generated_Source\PSoC4/RTC.h **** *******************************************************************************/
+ 649:Generated_Source\PSoC4/RTC.h **** static CY_INLINE uint32 RTC_GetSecond(uint32 inputTime)
+ 650:Generated_Source\PSoC4/RTC.h **** {
+ 651:Generated_Source\PSoC4/RTC.h ****     uint32 retVal;
+ 652:Generated_Source\PSoC4/RTC.h **** 
+ 653:Generated_Source\PSoC4/RTC.h ****     retVal  = ((inputTime & RTC_10_SECONDS_MASK) >> RTC_10_SECONDS_OFFSET) * 10u;
+ 654:Generated_Source\PSoC4/RTC.h ****     retVal += (inputTime & RTC_SECONDS_MASK) >> RTC_SECONDS_OFFSET;
+ 655:Generated_Source\PSoC4/RTC.h **** 
+ 656:Generated_Source\PSoC4/RTC.h ****     return (retVal);
+ 657:Generated_Source\PSoC4/RTC.h **** }
+ 658:Generated_Source\PSoC4/RTC.h **** 
+ 659:Generated_Source\PSoC4/RTC.h **** 
+ 660:Generated_Source\PSoC4/RTC.h **** /*******************************************************************************
+ 661:Generated_Source\PSoC4/RTC.h **** * Function Name: RTC_GetMinutes
+ 662:Generated_Source\PSoC4/RTC.h **** ****************************************************************************//**
+ 663:Generated_Source\PSoC4/RTC.h **** *
+ 664:Generated_Source\PSoC4/RTC.h **** * Returns the minutes value from the time value that is passed as a/the 
+ 665:Generated_Source\PSoC4/RTC.h **** * parameter.
+ 666:Generated_Source\PSoC4/RTC.h **** *
+ 667:Generated_Source\PSoC4/RTC.h **** * \param inputTime
+ 668:Generated_Source\PSoC4/RTC.h **** * The time value.
+ 669:Generated_Source\PSoC4/RTC.h **** *
+ 670:Generated_Source\PSoC4/RTC.h **** * \return
+ 671:Generated_Source\PSoC4/RTC.h **** * The minutes value.
+ 672:Generated_Source\PSoC4/RTC.h **** *
+ 673:Generated_Source\PSoC4/RTC.h **** *******************************************************************************/
+ 674:Generated_Source\PSoC4/RTC.h **** static CY_INLINE uint32 RTC_GetMinutes(uint32 inputTime)
+ 675:Generated_Source\PSoC4/RTC.h **** {
+ 676:Generated_Source\PSoC4/RTC.h ****     uint32 retVal;
+ 677:Generated_Source\PSoC4/RTC.h **** 
+ 678:Generated_Source\PSoC4/RTC.h ****     retVal  = ((inputTime & RTC_10_MINUTES_MASK) >> RTC_10_MINUTES_OFFSET) * 10u;
+ 679:Generated_Source\PSoC4/RTC.h ****     retVal += (inputTime & RTC_MINUTES_MASK) >> RTC_MINUTES_OFFSET;
+ 680:Generated_Source\PSoC4/RTC.h **** 
+ 681:Generated_Source\PSoC4/RTC.h ****     return (retVal);
+ 682:Generated_Source\PSoC4/RTC.h **** }
+ 683:Generated_Source\PSoC4/RTC.h **** 
+ 684:Generated_Source\PSoC4/RTC.h **** 
+ 685:Generated_Source\PSoC4/RTC.h **** /*******************************************************************************
+ 686:Generated_Source\PSoC4/RTC.h **** * Function Name: RTC_GetHours
+ 687:Generated_Source\PSoC4/RTC.h **** ****************************************************************************//**
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 18
+
+
+ 688:Generated_Source\PSoC4/RTC.h **** *
+ 689:Generated_Source\PSoC4/RTC.h **** * Returns the hours value from the time value that is passed as a/the parameter.
+ 690:Generated_Source\PSoC4/RTC.h **** *
+ 691:Generated_Source\PSoC4/RTC.h **** * \param inputTime
+ 692:Generated_Source\PSoC4/RTC.h **** * The time value.
+ 693:Generated_Source\PSoC4/RTC.h **** *
+ 694:Generated_Source\PSoC4/RTC.h **** * \return
+ 695:Generated_Source\PSoC4/RTC.h **** * The hours value.
+ 696:Generated_Source\PSoC4/RTC.h **** *
+ 697:Generated_Source\PSoC4/RTC.h **** *******************************************************************************/
+ 698:Generated_Source\PSoC4/RTC.h **** static CY_INLINE uint32 RTC_GetHours(uint32 inputTime)
+ 699:Generated_Source\PSoC4/RTC.h **** {
+ 700:Generated_Source\PSoC4/RTC.h ****     uint32 retVal;
+ 701:Generated_Source\PSoC4/RTC.h **** 
+ 702:Generated_Source\PSoC4/RTC.h ****     retVal  = ((inputTime & RTC_10_HOURS_MASK) >> RTC_10_HOURS_OFFSET) * 10u;
+ 172              		.loc 2 702 0
+ 173 0084 230D     		lsrs	r3, r4, #20
+ 174 0086 0322     		movs	r2, #3
+ 175 0088 1340     		ands	r3, r2
+ 176 008a 9A00     		lsls	r2, r3, #2
+ 177 008c D318     		adds	r3, r2, r3
+ 178 008e 5A00     		lsls	r2, r3, #1
+ 179              	.LVL20:
+ 703:Generated_Source\PSoC4/RTC.h ****     retVal += (inputTime & RTC_HOURS_MASK) >> RTC_HOURS_OFFSET;
+ 180              		.loc 2 703 0
+ 181 0090 250C     		lsrs	r5, r4, #16
+ 182 0092 0F21     		movs	r1, #15
+ 183 0094 0D40     		ands	r5, r1
+ 184 0096 5519     		adds	r5, r2, r5
+ 185              	.LVL21:
+ 186              	.LBE19:
+ 187              	.LBE18:
+ 188              	.LBB20:
+ 189              	.LBB21:
+ 678:Generated_Source\PSoC4/RTC.h ****     retVal += (inputTime & RTC_MINUTES_MASK) >> RTC_MINUTES_OFFSET;
+ 190              		.loc 2 678 0
+ 191 0098 220B     		lsrs	r2, r4, #12
+ 192 009a 0720     		movs	r0, #7
+ 193 009c 0240     		ands	r2, r0
+ 194 009e 9300     		lsls	r3, r2, #2
+ 195 00a0 9A18     		adds	r2, r3, r2
+ 196 00a2 5300     		lsls	r3, r2, #1
+ 197              	.LVL22:
+ 679:Generated_Source\PSoC4/RTC.h **** 
+ 198              		.loc 2 679 0
+ 199 00a4 270A     		lsrs	r7, r4, #8
+ 200 00a6 0F40     		ands	r7, r1
+ 201 00a8 DF19     		adds	r7, r3, r7
+ 202              	.LVL23:
+ 203              	.LBE21:
+ 204              	.LBE20:
+ 205              	.LBB22:
+ 206              	.LBB23:
+ 653:Generated_Source\PSoC4/RTC.h ****     retVal += (inputTime & RTC_SECONDS_MASK) >> RTC_SECONDS_OFFSET;
+ 207              		.loc 2 653 0
+ 208 00aa 2309     		lsrs	r3, r4, #4
+ 209 00ac 0340     		ands	r3, r0
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 19
+
+
+ 210 00ae 9A00     		lsls	r2, r3, #2
+ 211 00b0 D318     		adds	r3, r2, r3
+ 212 00b2 5A00     		lsls	r2, r3, #1
+ 213              	.LVL24:
+ 654:Generated_Source\PSoC4/RTC.h **** 
+ 214              		.loc 2 654 0
+ 215 00b4 0C40     		ands	r4, r1
+ 216              	.LVL25:
+ 217 00b6 1419     		adds	r4, r2, r4
+ 218              	.LVL26:
+ 219              	.LBE23:
+ 220              	.LBE22:
+  60:main.c        **** //    CyDelay(5000);
+ 221              		.loc 1 60 0
+ 222 00b8 0094     		str	r4, [sp]
+ 223 00ba 3B00     		movs	r3, r7
+ 224 00bc 2A00     		movs	r2, r5
+ 225 00be 2049     		ldr	r1, .L13+12
+ 226 00c0 02A8     		add	r0, sp, #8
+ 227 00c2 FFF7FEFF 		bl	sprintf
+ 228              	.LVL27:
+  62:main.c        **** min=RTC_GetMinutes(tim1);
+ 229              		.loc 1 62 0
+ 230 00c6 B845     		cmp	r8, r7
+ 231 00c8 08D0     		beq	.L7
+ 232              	.LVL28:
+  64:main.c        **** }
+ 233              		.loc 1 64 0
+ 234 00ca 0023     		movs	r3, #0
+ 235 00cc 0093     		str	r3, [sp]
+ 236 00ce 3233     		adds	r3, r3, #50
+ 237 00d0 1422     		movs	r2, #20
+ 238 00d2 3221     		movs	r1, #50
+ 239 00d4 0520     		movs	r0, #5
+ 240 00d6 FFF7FEFF 		bl	TFT_FillRectangle
+ 241              	.LVL29:
+  63:main.c        ****  TFT_FillRectangle(5, 50, 20, 50, 0x0000);
+ 242              		.loc 1 63 0
+ 243 00da B846     		mov	r8, r7
+ 244              	.L7:
+ 245              	.LVL30:
+  67:main.c        **** hr=RTC_GetHours(tim1);
+ 246              		.loc 1 67 0
+ 247 00dc AE42     		cmp	r6, r5
+ 248 00de 16D0     		beq	.L12
+ 249              	.LVL31:
+  69:main.c        **** for(j=0;j<hr;j++)
+ 250              		.loc 1 69 0
+ 251 00e0 0023     		movs	r3, #0
+ 252 00e2 0093     		str	r3, [sp]
+ 253 00e4 2833     		adds	r3, r3, #40
+ 254 00e6 1422     		movs	r2, #20
+ 255 00e8 1E21     		movs	r1, #30
+ 256 00ea 0520     		movs	r0, #5
+ 257 00ec FFF7FEFF 		bl	TFT_FillRectangle
+ 258              	.LVL32:
+  70:main.c        **** {
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 20
+
+
+ 259              		.loc 1 70 0
+ 260 00f0 0024     		movs	r4, #0
+ 261 00f2 09E0     		b	.L9
+ 262              	.LVL33:
+ 263              	.L10:
+  72:main.c        **** CyDelay(100);
+ 264              		.loc 1 72 0 discriminator 3
+ 265 00f4 FFF7FEFF 		bl	ring_Read
+ 266              	.LVL34:
+ 267 00f8 C043     		mvns	r0, r0
+ 268 00fa C0B2     		uxtb	r0, r0
+ 269 00fc FFF7FEFF 		bl	ring_Write
+ 270              	.LVL35:
+  73:main.c        **** }
+ 271              		.loc 1 73 0 discriminator 3
+ 272 0100 6420     		movs	r0, #100
+ 273 0102 FFF7FEFF 		bl	CyDelay
+ 274              	.LVL36:
+  70:main.c        **** {
+ 275              		.loc 1 70 0 discriminator 3
+ 276 0106 0134     		adds	r4, r4, #1
+ 277              	.LVL37:
+ 278              	.L9:
+  70:main.c        **** {
+ 279              		.loc 1 70 0 is_stmt 0 discriminator 1
+ 280 0108 AC42     		cmp	r4, r5
+ 281 010a F3D3     		bcc	.L10
+ 282 010c 00E0     		b	.L8
+ 283              	.LVL38:
+ 284              	.L12:
+ 285 010e 3500     		movs	r5, r6
+ 286              	.LVL39:
+ 287              	.L8:
+  78:main.c        ****     //  DrawString(char *string, poX, poY, size,    fgcolor);
+ 288              		.loc 1 78 0 is_stmt 1
+ 289 0110 0A4B     		ldr	r3, .L13+8
+ 290 0112 0093     		str	r3, [sp]
+ 291 0114 0223     		movs	r3, #2
+ 292 0116 1E22     		movs	r2, #30
+ 293 0118 0521     		movs	r1, #5
+ 294 011a 02A8     		add	r0, sp, #8
+ 295 011c FFF7FEFF 		bl	DrawString
+ 296              	.LVL40:
+  81:main.c        **** CyDelay(900);
+ 297              		.loc 1 81 0
+ 298 0120 0020     		movs	r0, #0
+ 299 0122 FFF7FEFF 		bl	ring_Write
+ 300              	.LVL41:
+  82:main.c        ****     }
+ 301              		.loc 1 82 0
+ 302 0126 E120     		movs	r0, #225
+ 303 0128 8000     		lsls	r0, r0, #2
+ 304 012a FFF7FEFF 		bl	CyDelay
+ 305              	.LVL42:
+ 306              	.LBE17:
+  83:main.c        ****     
+ 307              		.loc 1 83 0
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 21
+
+
+ 308 012e 2E00     		movs	r6, r5
+ 309 0130 9DE7     		b	.L11
+ 310              	.L14:
+ 311 0132 C046     		.align	2
+ 312              	.L13:
+ 313 0134 009F2400 		.word	2400000
+ 314 0138 00000000 		.word	SysTickIsrHandler
+ 315 013c 1F050000 		.word	1311
+ 316 0140 00000000 		.word	.LC1
+ 317              		.cfi_endproc
+ 318              	.LFE60:
+ 319              		.size	main, .-main
+ 320              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 321              		.align	2
+ 322              	.LC1:
+ 323 0000 25303275 		.ascii	"%02u:%02u:%02u\000"
+ 323      3A253032 
+ 323      753A2530 
+ 323      327500
+ 324              		.text
+ 325              	.Letext0:
+ 326              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 327              		.file 4 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 328              		.file 5 "Generated_Source\\PSoC4/cytypes.h"
+ 329              		.file 6 "TFT.h"
+ 330              		.file 7 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 331              		.file 8 "Generated_Source\\PSoC4/ring.h"
+ 332              		.file 9 "Generated_Source\\PSoC4/CyLib.h"
+ 333              		.file 10 "Generated_Source\\PSoC4/PWM.h"
+ 334              		.file 11 "Generated_Source\\PSoC4/SPIM.h"
+ 335              		.section	.debug_info,"",%progbits
+ 336              	.Ldebug_info0:
+ 337 0000 7B050000 		.4byte	0x57b
+ 338 0004 0400     		.2byte	0x4
+ 339 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 340 000a 04       		.byte	0x4
+ 341 000b 01       		.uleb128 0x1
+ 342 000c A3010000 		.4byte	.LASF43
+ 343 0010 0C       		.byte	0xc
+ 344 0011 56020000 		.4byte	.LASF44
+ 345 0015 6A010000 		.4byte	.LASF45
+ 346 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 347 001d 00000000 		.4byte	0
+ 348 0021 00000000 		.4byte	.Ldebug_line0
+ 349 0025 02       		.uleb128 0x2
+ 350 0026 01       		.byte	0x1
+ 351 0027 06       		.byte	0x6
+ 352 0028 7B000000 		.4byte	.LASF0
+ 353 002c 02       		.uleb128 0x2
+ 354 002d 01       		.byte	0x1
+ 355 002e 08       		.byte	0x8
+ 356 002f 91000000 		.4byte	.LASF1
+ 357 0033 02       		.uleb128 0x2
+ 358 0034 02       		.byte	0x2
+ 359 0035 05       		.byte	0x5
+ 360 0036 1A010000 		.4byte	.LASF2
+ 361 003a 02       		.uleb128 0x2
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 22
+
+
+ 362 003b 02       		.byte	0x2
+ 363 003c 07       		.byte	0x7
+ 364 003d 2E000000 		.4byte	.LASF3
+ 365 0041 02       		.uleb128 0x2
+ 366 0042 04       		.byte	0x4
+ 367 0043 05       		.byte	0x5
+ 368 0044 AF020000 		.4byte	.LASF4
+ 369 0048 03       		.uleb128 0x3
+ 370 0049 E2000000 		.4byte	.LASF9
+ 371 004d 03       		.byte	0x3
+ 372 004e 41       		.byte	0x41
+ 373 004f 53000000 		.4byte	0x53
+ 374 0053 02       		.uleb128 0x2
+ 375 0054 04       		.byte	0x4
+ 376 0055 07       		.byte	0x7
+ 377 0056 AA000000 		.4byte	.LASF5
+ 378 005a 02       		.uleb128 0x2
+ 379 005b 08       		.byte	0x8
+ 380 005c 05       		.byte	0x5
+ 381 005d 48020000 		.4byte	.LASF6
+ 382 0061 02       		.uleb128 0x2
+ 383 0062 08       		.byte	0x8
+ 384 0063 07       		.byte	0x7
+ 385 0064 53010000 		.4byte	.LASF7
+ 386 0068 04       		.uleb128 0x4
+ 387 0069 04       		.byte	0x4
+ 388 006a 05       		.byte	0x5
+ 389 006b 696E7400 		.ascii	"int\000"
+ 390 006f 02       		.uleb128 0x2
+ 391 0070 04       		.byte	0x4
+ 392 0071 07       		.byte	0x7
+ 393 0072 37010000 		.4byte	.LASF8
+ 394 0076 03       		.uleb128 0x3
+ 395 0077 A6020000 		.4byte	.LASF10
+ 396 007b 04       		.byte	0x4
+ 397 007c 30       		.byte	0x30
+ 398 007d 48000000 		.4byte	0x48
+ 399 0081 05       		.uleb128 0x5
+ 400 0082 24010000 		.4byte	.LASF11
+ 401 0086 05       		.byte	0x5
+ 402 0087 E501     		.2byte	0x1e5
+ 403 0089 3A000000 		.4byte	0x3a
+ 404 008d 05       		.uleb128 0x5
+ 405 008e 2B010000 		.4byte	.LASF12
+ 406 0092 05       		.byte	0x5
+ 407 0093 E601     		.2byte	0x1e6
+ 408 0095 53000000 		.4byte	0x53
+ 409 0099 02       		.uleb128 0x2
+ 410 009a 04       		.byte	0x4
+ 411 009b 04       		.byte	0x4
+ 412 009c 75000000 		.4byte	.LASF13
+ 413 00a0 02       		.uleb128 0x2
+ 414 00a1 08       		.byte	0x8
+ 415 00a2 04       		.byte	0x4
+ 416 00a3 0A010000 		.4byte	.LASF14
+ 417 00a7 02       		.uleb128 0x2
+ 418 00a8 01       		.byte	0x1
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 23
+
+
+ 419 00a9 08       		.byte	0x8
+ 420 00aa 5D020000 		.4byte	.LASF15
+ 421 00ae 02       		.uleb128 0x2
+ 422 00af 08       		.byte	0x8
+ 423 00b0 04       		.byte	0x4
+ 424 00b1 CF020000 		.4byte	.LASF16
+ 425 00b5 02       		.uleb128 0x2
+ 426 00b6 04       		.byte	0x4
+ 427 00b7 07       		.byte	0x7
+ 428 00b8 3F020000 		.4byte	.LASF17
+ 429 00bc 06       		.uleb128 0x6
+ 430 00bd BC000000 		.4byte	.LASF18
+ 431 00c1 02       		.byte	0x2
+ 432 00c2 A202     		.2byte	0x2a2
+ 433 00c4 8D000000 		.4byte	0x8d
+ 434 00c8 03       		.byte	0x3
+ 435 00c9 E6000000 		.4byte	0xe6
+ 436 00cd 07       		.uleb128 0x7
+ 437 00ce E5020000 		.4byte	.LASF20
+ 438 00d2 02       		.byte	0x2
+ 439 00d3 A202     		.2byte	0x2a2
+ 440 00d5 8D000000 		.4byte	0x8d
+ 441 00d9 08       		.uleb128 0x8
+ 442 00da 59000000 		.4byte	.LASF21
+ 443 00de 02       		.byte	0x2
+ 444 00df A402     		.2byte	0x2a4
+ 445 00e1 8D000000 		.4byte	0x8d
+ 446 00e5 00       		.byte	0
+ 447 00e6 06       		.uleb128 0x6
+ 448 00e7 0B000000 		.4byte	.LASF19
+ 449 00eb 02       		.byte	0x2
+ 450 00ec 8902     		.2byte	0x289
+ 451 00ee 8D000000 		.4byte	0x8d
+ 452 00f2 03       		.byte	0x3
+ 453 00f3 10010000 		.4byte	0x110
+ 454 00f7 07       		.uleb128 0x7
+ 455 00f8 E5020000 		.4byte	.LASF20
+ 456 00fc 02       		.byte	0x2
+ 457 00fd 8902     		.2byte	0x289
+ 458 00ff 8D000000 		.4byte	0x8d
+ 459 0103 08       		.uleb128 0x8
+ 460 0104 59000000 		.4byte	.LASF21
+ 461 0108 02       		.byte	0x2
+ 462 0109 8B02     		.2byte	0x28b
+ 463 010b 8D000000 		.4byte	0x8d
+ 464 010f 00       		.byte	0
+ 465 0110 06       		.uleb128 0x6
+ 466 0111 4C000000 		.4byte	.LASF22
+ 467 0115 02       		.byte	0x2
+ 468 0116 BA02     		.2byte	0x2ba
+ 469 0118 8D000000 		.4byte	0x8d
+ 470 011c 03       		.byte	0x3
+ 471 011d 3A010000 		.4byte	0x13a
+ 472 0121 07       		.uleb128 0x7
+ 473 0122 E5020000 		.4byte	.LASF20
+ 474 0126 02       		.byte	0x2
+ 475 0127 BA02     		.2byte	0x2ba
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 24
+
+
+ 476 0129 8D000000 		.4byte	0x8d
+ 477 012d 08       		.uleb128 0x8
+ 478 012e 59000000 		.4byte	.LASF21
+ 479 0132 02       		.byte	0x2
+ 480 0133 BC02     		.2byte	0x2bc
+ 481 0135 8D000000 		.4byte	0x8d
+ 482 0139 00       		.byte	0
+ 483 013a 09       		.uleb128 0x9
+ 484 013b F8000000 		.4byte	.LASF46
+ 485 013f 01       		.byte	0x1
+ 486 0140 56       		.byte	0x56
+ 487 0141 00000000 		.4byte	.LFB61
+ 488 0145 08000000 		.4byte	.LFE61-.LFB61
+ 489 0149 01       		.uleb128 0x1
+ 490 014a 9C       		.byte	0x9c
+ 491 014b 59010000 		.4byte	0x159
+ 492 014f 0A       		.uleb128 0xa
+ 493 0150 06000000 		.4byte	.LVL0
+ 494 0154 B2040000 		.4byte	0x4b2
+ 495 0158 00       		.byte	0
+ 496 0159 0B       		.uleb128 0xb
+ 497 015a 32010000 		.4byte	.LASF47
+ 498 015e 01       		.byte	0x1
+ 499 015f 15       		.byte	0x15
+ 500 0160 68000000 		.4byte	0x68
+ 501 0164 00000000 		.4byte	.LFB60
+ 502 0168 44010000 		.4byte	.LFE60-.LFB60
+ 503 016c 01       		.uleb128 0x1
+ 504 016d 9C       		.byte	0x9c
+ 505 016e 7C040000 		.4byte	0x47c
+ 506 0172 0C       		.uleb128 0xc
+ 507 0173 6900     		.ascii	"i\000"
+ 508 0175 01       		.byte	0x1
+ 509 0176 17       		.byte	0x17
+ 510 0177 68000000 		.4byte	0x68
+ 511 017b 00000000 		.4byte	.LLST0
+ 512 017f 0C       		.uleb128 0xc
+ 513 0180 6A00     		.ascii	"j\000"
+ 514 0182 01       		.byte	0x1
+ 515 0183 17       		.byte	0x17
+ 516 0184 68000000 		.4byte	0x68
+ 517 0188 1F000000 		.4byte	.LLST1
+ 518 018c 0D       		.uleb128 0xd
+ 519 018d 00000000 		.4byte	.LASF23
+ 520 0191 01       		.byte	0x1
+ 521 0192 18       		.byte	0x18
+ 522 0193 7C040000 		.4byte	0x47c
+ 523 0197 02       		.uleb128 0x2
+ 524 0198 91       		.byte	0x91
+ 525 0199 58       		.sleb128 -40
+ 526 019a 0C       		.uleb128 0xc
+ 527 019b 6D696E00 		.ascii	"min\000"
+ 528 019f 01       		.byte	0x1
+ 529 01a0 1B       		.byte	0x1b
+ 530 01a1 76000000 		.4byte	0x76
+ 531 01a5 3E000000 		.4byte	.LLST2
+ 532 01a9 0C       		.uleb128 0xc
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 25
+
+
+ 533 01aa 687200   		.ascii	"hr\000"
+ 534 01ad 01       		.byte	0x1
+ 535 01ae 1C       		.byte	0x1c
+ 536 01af 76000000 		.4byte	0x76
+ 537 01b3 68000000 		.4byte	.LLST3
+ 538 01b7 0E       		.uleb128 0xe
+ 539 01b8 70000000 		.4byte	.LASF24
+ 540 01bc 01       		.byte	0x1
+ 541 01bd 1D       		.byte	0x1d
+ 542 01be 76000000 		.4byte	0x76
+ 543 01c2 9D000000 		.4byte	.LLST4
+ 544 01c6 0F       		.uleb128 0xf
+ 545 01c7 6E000000 		.4byte	.LBB17
+ 546 01cb C0000000 		.4byte	.LBE17-.LBB17
+ 547 01cf A0030000 		.4byte	0x3a0
+ 548 01d3 10       		.uleb128 0x10
+ 549 01d4 9F000000 		.4byte	.LASF32
+ 550 01d8 01       		.byte	0x1
+ 551 01d9 4E       		.byte	0x4e
+ 552 01da 68000000 		.4byte	0x68
+ 553 01de E4010000 		.4byte	0x1e4
+ 554 01e2 11       		.uleb128 0x11
+ 555 01e3 00       		.byte	0
+ 556 01e4 12       		.uleb128 0x12
+ 557 01e5 10010000 		.4byte	0x110
+ 558 01e9 84000000 		.4byte	.LBB18
+ 559 01ed 14000000 		.4byte	.LBE18-.LBB18
+ 560 01f1 01       		.byte	0x1
+ 561 01f2 3C       		.byte	0x3c
+ 562 01f3 14020000 		.4byte	0x214
+ 563 01f7 13       		.uleb128 0x13
+ 564 01f8 21010000 		.4byte	0x121
+ 565 01fc BB000000 		.4byte	.LLST5
+ 566 0200 14       		.uleb128 0x14
+ 567 0201 84000000 		.4byte	.LBB19
+ 568 0205 14000000 		.4byte	.LBE19-.LBB19
+ 569 0209 15       		.uleb128 0x15
+ 570 020a 2D010000 		.4byte	0x12d
+ 571 020e CE000000 		.4byte	.LLST6
+ 572 0212 00       		.byte	0
+ 573 0213 00       		.byte	0
+ 574 0214 12       		.uleb128 0x12
+ 575 0215 BC000000 		.4byte	0xbc
+ 576 0219 98000000 		.4byte	.LBB20
+ 577 021d 12000000 		.4byte	.LBE20-.LBB20
+ 578 0221 01       		.byte	0x1
+ 579 0222 3C       		.byte	0x3c
+ 580 0223 44020000 		.4byte	0x244
+ 581 0227 13       		.uleb128 0x13
+ 582 0228 CD000000 		.4byte	0xcd
+ 583 022c E1000000 		.4byte	.LLST7
+ 584 0230 14       		.uleb128 0x14
+ 585 0231 98000000 		.4byte	.LBB21
+ 586 0235 12000000 		.4byte	.LBE21-.LBB21
+ 587 0239 15       		.uleb128 0x15
+ 588 023a D9000000 		.4byte	0xd9
+ 589 023e F4000000 		.4byte	.LLST8
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 26
+
+
+ 590 0242 00       		.byte	0
+ 591 0243 00       		.byte	0
+ 592 0244 12       		.uleb128 0x12
+ 593 0245 E6000000 		.4byte	0xe6
+ 594 0249 AA000000 		.4byte	.LBB22
+ 595 024d 0E000000 		.4byte	.LBE22-.LBB22
+ 596 0251 01       		.byte	0x1
+ 597 0252 3C       		.byte	0x3c
+ 598 0253 74020000 		.4byte	0x274
+ 599 0257 13       		.uleb128 0x13
+ 600 0258 F7000000 		.4byte	0xf7
+ 601 025c 07010000 		.4byte	.LLST9
+ 602 0260 14       		.uleb128 0x14
+ 603 0261 AA000000 		.4byte	.LBB23
+ 604 0265 0E000000 		.4byte	.LBE23-.LBB23
+ 605 0269 15       		.uleb128 0x15
+ 606 026a 03010000 		.4byte	0x103
+ 607 026e 1A010000 		.4byte	.LLST10
+ 608 0272 00       		.byte	0
+ 609 0273 00       		.byte	0
+ 610 0274 0A       		.uleb128 0xa
+ 611 0275 72000000 		.4byte	.LVL16
+ 612 0279 BE040000 		.4byte	0x4be
+ 613 027d 16       		.uleb128 0x16
+ 614 027e 84000000 		.4byte	.LVL19
+ 615 0282 CA040000 		.4byte	0x4ca
+ 616 0286 A7020000 		.4byte	0x2a7
+ 617 028a 17       		.uleb128 0x17
+ 618 028b 01       		.uleb128 0x1
+ 619 028c 50       		.byte	0x50
+ 620 028d 01       		.uleb128 0x1
+ 621 028e 35       		.byte	0x35
+ 622 028f 17       		.uleb128 0x17
+ 623 0290 01       		.uleb128 0x1
+ 624 0291 51       		.byte	0x51
+ 625 0292 02       		.uleb128 0x2
+ 626 0293 08       		.byte	0x8
+ 627 0294 64       		.byte	0x64
+ 628 0295 17       		.uleb128 0x17
+ 629 0296 01       		.uleb128 0x1
+ 630 0297 52       		.byte	0x52
+ 631 0298 01       		.uleb128 0x1
+ 632 0299 44       		.byte	0x44
+ 633 029a 17       		.uleb128 0x17
+ 634 029b 01       		.uleb128 0x1
+ 635 029c 53       		.byte	0x53
+ 636 029d 02       		.uleb128 0x2
+ 637 029e 08       		.byte	0x8
+ 638 029f 32       		.byte	0x32
+ 639 02a0 17       		.uleb128 0x17
+ 640 02a1 02       		.uleb128 0x2
+ 641 02a2 7D       		.byte	0x7d
+ 642 02a3 00       		.sleb128 0
+ 643 02a4 01       		.uleb128 0x1
+ 644 02a5 30       		.byte	0x30
+ 645 02a6 00       		.byte	0
+ 646 02a7 16       		.uleb128 0x16
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 27
+
+
+ 647 02a8 C6000000 		.4byte	.LVL27
+ 648 02ac D5040000 		.4byte	0x4d5
+ 649 02b0 D7020000 		.4byte	0x2d7
+ 650 02b4 17       		.uleb128 0x17
+ 651 02b5 01       		.uleb128 0x1
+ 652 02b6 50       		.byte	0x50
+ 653 02b7 02       		.uleb128 0x2
+ 654 02b8 91       		.byte	0x91
+ 655 02b9 58       		.sleb128 -40
+ 656 02ba 17       		.uleb128 0x17
+ 657 02bb 01       		.uleb128 0x1
+ 658 02bc 51       		.byte	0x51
+ 659 02bd 05       		.uleb128 0x5
+ 660 02be 03       		.byte	0x3
+ 661 02bf 00000000 		.4byte	.LC1
+ 662 02c3 17       		.uleb128 0x17
+ 663 02c4 01       		.uleb128 0x1
+ 664 02c5 52       		.byte	0x52
+ 665 02c6 02       		.uleb128 0x2
+ 666 02c7 75       		.byte	0x75
+ 667 02c8 00       		.sleb128 0
+ 668 02c9 17       		.uleb128 0x17
+ 669 02ca 01       		.uleb128 0x1
+ 670 02cb 53       		.byte	0x53
+ 671 02cc 02       		.uleb128 0x2
+ 672 02cd 77       		.byte	0x77
+ 673 02ce 00       		.sleb128 0
+ 674 02cf 17       		.uleb128 0x17
+ 675 02d0 02       		.uleb128 0x2
+ 676 02d1 7D       		.byte	0x7d
+ 677 02d2 00       		.sleb128 0
+ 678 02d3 02       		.uleb128 0x2
+ 679 02d4 74       		.byte	0x74
+ 680 02d5 00       		.sleb128 0
+ 681 02d6 00       		.byte	0
+ 682 02d7 16       		.uleb128 0x16
+ 683 02d8 DA000000 		.4byte	.LVL29
+ 684 02dc CA040000 		.4byte	0x4ca
+ 685 02e0 01030000 		.4byte	0x301
+ 686 02e4 17       		.uleb128 0x17
+ 687 02e5 01       		.uleb128 0x1
+ 688 02e6 50       		.byte	0x50
+ 689 02e7 01       		.uleb128 0x1
+ 690 02e8 35       		.byte	0x35
+ 691 02e9 17       		.uleb128 0x17
+ 692 02ea 01       		.uleb128 0x1
+ 693 02eb 51       		.byte	0x51
+ 694 02ec 02       		.uleb128 0x2
+ 695 02ed 08       		.byte	0x8
+ 696 02ee 32       		.byte	0x32
+ 697 02ef 17       		.uleb128 0x17
+ 698 02f0 01       		.uleb128 0x1
+ 699 02f1 52       		.byte	0x52
+ 700 02f2 01       		.uleb128 0x1
+ 701 02f3 44       		.byte	0x44
+ 702 02f4 17       		.uleb128 0x17
+ 703 02f5 01       		.uleb128 0x1
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 28
+
+
+ 704 02f6 53       		.byte	0x53
+ 705 02f7 02       		.uleb128 0x2
+ 706 02f8 08       		.byte	0x8
+ 707 02f9 32       		.byte	0x32
+ 708 02fa 17       		.uleb128 0x17
+ 709 02fb 02       		.uleb128 0x2
+ 710 02fc 7D       		.byte	0x7d
+ 711 02fd 00       		.sleb128 0
+ 712 02fe 01       		.uleb128 0x1
+ 713 02ff 30       		.byte	0x30
+ 714 0300 00       		.byte	0
+ 715 0301 16       		.uleb128 0x16
+ 716 0302 F0000000 		.4byte	.LVL32
+ 717 0306 CA040000 		.4byte	0x4ca
+ 718 030a 2A030000 		.4byte	0x32a
+ 719 030e 17       		.uleb128 0x17
+ 720 030f 01       		.uleb128 0x1
+ 721 0310 50       		.byte	0x50
+ 722 0311 01       		.uleb128 0x1
+ 723 0312 35       		.byte	0x35
+ 724 0313 17       		.uleb128 0x17
+ 725 0314 01       		.uleb128 0x1
+ 726 0315 51       		.byte	0x51
+ 727 0316 01       		.uleb128 0x1
+ 728 0317 4E       		.byte	0x4e
+ 729 0318 17       		.uleb128 0x17
+ 730 0319 01       		.uleb128 0x1
+ 731 031a 52       		.byte	0x52
+ 732 031b 01       		.uleb128 0x1
+ 733 031c 44       		.byte	0x44
+ 734 031d 17       		.uleb128 0x17
+ 735 031e 01       		.uleb128 0x1
+ 736 031f 53       		.byte	0x53
+ 737 0320 02       		.uleb128 0x2
+ 738 0321 08       		.byte	0x8
+ 739 0322 28       		.byte	0x28
+ 740 0323 17       		.uleb128 0x17
+ 741 0324 02       		.uleb128 0x2
+ 742 0325 7D       		.byte	0x7d
+ 743 0326 00       		.sleb128 0
+ 744 0327 01       		.uleb128 0x1
+ 745 0328 30       		.byte	0x30
+ 746 0329 00       		.byte	0
+ 747 032a 0A       		.uleb128 0xa
+ 748 032b F8000000 		.4byte	.LVL34
+ 749 032f E0040000 		.4byte	0x4e0
+ 750 0333 0A       		.uleb128 0xa
+ 751 0334 00010000 		.4byte	.LVL35
+ 752 0338 EB040000 		.4byte	0x4eb
+ 753 033c 16       		.uleb128 0x16
+ 754 033d 06010000 		.4byte	.LVL36
+ 755 0341 F6040000 		.4byte	0x4f6
+ 756 0345 50030000 		.4byte	0x350
+ 757 0349 17       		.uleb128 0x17
+ 758 034a 01       		.uleb128 0x1
+ 759 034b 50       		.byte	0x50
+ 760 034c 02       		.uleb128 0x2
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 29
+
+
+ 761 034d 08       		.byte	0x8
+ 762 034e 64       		.byte	0x64
+ 763 034f 00       		.byte	0
+ 764 0350 16       		.uleb128 0x16
+ 765 0351 20010000 		.4byte	.LVL40
+ 766 0355 01050000 		.4byte	0x501
+ 767 0359 7B030000 		.4byte	0x37b
+ 768 035d 17       		.uleb128 0x17
+ 769 035e 01       		.uleb128 0x1
+ 770 035f 50       		.byte	0x50
+ 771 0360 02       		.uleb128 0x2
+ 772 0361 91       		.byte	0x91
+ 773 0362 58       		.sleb128 -40
+ 774 0363 17       		.uleb128 0x17
+ 775 0364 01       		.uleb128 0x1
+ 776 0365 51       		.byte	0x51
+ 777 0366 01       		.uleb128 0x1
+ 778 0367 35       		.byte	0x35
+ 779 0368 17       		.uleb128 0x17
+ 780 0369 01       		.uleb128 0x1
+ 781 036a 52       		.byte	0x52
+ 782 036b 01       		.uleb128 0x1
+ 783 036c 4E       		.byte	0x4e
+ 784 036d 17       		.uleb128 0x17
+ 785 036e 01       		.uleb128 0x1
+ 786 036f 53       		.byte	0x53
+ 787 0370 01       		.uleb128 0x1
+ 788 0371 32       		.byte	0x32
+ 789 0372 17       		.uleb128 0x17
+ 790 0373 02       		.uleb128 0x2
+ 791 0374 7D       		.byte	0x7d
+ 792 0375 00       		.sleb128 0
+ 793 0376 03       		.uleb128 0x3
+ 794 0377 0A       		.byte	0xa
+ 795 0378 1F05     		.2byte	0x51f
+ 796 037a 00       		.byte	0
+ 797 037b 16       		.uleb128 0x16
+ 798 037c 26010000 		.4byte	.LVL41
+ 799 0380 EB040000 		.4byte	0x4eb
+ 800 0384 8E030000 		.4byte	0x38e
+ 801 0388 17       		.uleb128 0x17
+ 802 0389 01       		.uleb128 0x1
+ 803 038a 50       		.byte	0x50
+ 804 038b 01       		.uleb128 0x1
+ 805 038c 30       		.byte	0x30
+ 806 038d 00       		.byte	0
+ 807 038e 18       		.uleb128 0x18
+ 808 038f 2E010000 		.4byte	.LVL42
+ 809 0393 F6040000 		.4byte	0x4f6
+ 810 0397 17       		.uleb128 0x17
+ 811 0398 01       		.uleb128 0x1
+ 812 0399 50       		.byte	0x50
+ 813 039a 03       		.uleb128 0x3
+ 814 039b 0A       		.byte	0xa
+ 815 039c 8403     		.2byte	0x384
+ 816 039e 00       		.byte	0
+ 817 039f 00       		.byte	0
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 30
+
+
+ 818 03a0 0A       		.uleb128 0xa
+ 819 03a1 0C000000 		.4byte	.LVL1
+ 820 03a5 0C050000 		.4byte	0x50c
+ 821 03a9 0A       		.uleb128 0xa
+ 822 03aa 10000000 		.4byte	.LVL2
+ 823 03ae 17050000 		.4byte	0x517
+ 824 03b2 16       		.uleb128 0x16
+ 825 03b3 16000000 		.4byte	.LVL3
+ 826 03b7 22050000 		.4byte	0x522
+ 827 03bb C5030000 		.4byte	0x3c5
+ 828 03bf 17       		.uleb128 0x17
+ 829 03c0 01       		.uleb128 0x1
+ 830 03c1 50       		.byte	0x50
+ 831 03c2 01       		.uleb128 0x1
+ 832 03c3 31       		.byte	0x31
+ 833 03c4 00       		.byte	0
+ 834 03c5 0A       		.uleb128 0xa
+ 835 03c6 1A000000 		.4byte	.LVL4
+ 836 03ca 2D050000 		.4byte	0x52d
+ 837 03ce 0A       		.uleb128 0xa
+ 838 03cf 1E000000 		.4byte	.LVL5
+ 839 03d3 38050000 		.4byte	0x538
+ 840 03d7 16       		.uleb128 0x16
+ 841 03d8 26000000 		.4byte	.LVL6
+ 842 03dc 44050000 		.4byte	0x544
+ 843 03e0 EF030000 		.4byte	0x3ef
+ 844 03e4 17       		.uleb128 0x17
+ 845 03e5 01       		.uleb128 0x1
+ 846 03e6 50       		.byte	0x50
+ 847 03e7 01       		.uleb128 0x1
+ 848 03e8 31       		.byte	0x31
+ 849 03e9 17       		.uleb128 0x17
+ 850 03ea 01       		.uleb128 0x1
+ 851 03eb 51       		.byte	0x51
+ 852 03ec 01       		.uleb128 0x1
+ 853 03ed 3A       		.byte	0x3a
+ 854 03ee 00       		.byte	0
+ 855 03ef 0A       		.uleb128 0xa
+ 856 03f0 2A000000 		.4byte	.LVL7
+ 857 03f4 50050000 		.4byte	0x550
+ 858 03f8 16       		.uleb128 0x16
+ 859 03f9 30000000 		.4byte	.LVL8
+ 860 03fd 5B050000 		.4byte	0x55b
+ 861 0401 0F040000 		.4byte	0x40f
+ 862 0405 17       		.uleb128 0x17
+ 863 0406 01       		.uleb128 0x1
+ 864 0407 50       		.byte	0x50
+ 865 0408 05       		.uleb128 0x5
+ 866 0409 0C       		.byte	0xc
+ 867 040a 009F2400 		.4byte	0x249f00
+ 868 040e 00       		.byte	0
+ 869 040f 16       		.uleb128 0x16
+ 870 0410 3A000000 		.4byte	.LVL10
+ 871 0414 66050000 		.4byte	0x566
+ 872 0418 23040000 		.4byte	0x423
+ 873 041c 17       		.uleb128 0x17
+ 874 041d 01       		.uleb128 0x1
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 31
+
+
+ 875 041e 50       		.byte	0x50
+ 876 041f 02       		.uleb128 0x2
+ 877 0420 74       		.byte	0x74
+ 878 0421 00       		.sleb128 0
+ 879 0422 00       		.byte	0
+ 880 0423 16       		.uleb128 0x16
+ 881 0424 46000000 		.4byte	.LVL11
+ 882 0428 72050000 		.4byte	0x572
+ 883 042c 40040000 		.4byte	0x440
+ 884 0430 17       		.uleb128 0x17
+ 885 0431 01       		.uleb128 0x1
+ 886 0432 50       		.byte	0x50
+ 887 0433 02       		.uleb128 0x2
+ 888 0434 74       		.byte	0x74
+ 889 0435 00       		.sleb128 0
+ 890 0436 17       		.uleb128 0x17
+ 891 0437 01       		.uleb128 0x1
+ 892 0438 51       		.byte	0x51
+ 893 0439 05       		.uleb128 0x5
+ 894 043a 03       		.byte	0x3
+ 895 043b 00000000 		.4byte	SysTickIsrHandler
+ 896 043f 00       		.byte	0
+ 897 0440 16       		.uleb128 0x16
+ 898 0441 58000000 		.4byte	.LVL13
+ 899 0445 EB040000 		.4byte	0x4eb
+ 900 0449 53040000 		.4byte	0x453
+ 901 044d 17       		.uleb128 0x17
+ 902 044e 01       		.uleb128 0x1
+ 903 044f 50       		.byte	0x50
+ 904 0450 01       		.uleb128 0x1
+ 905 0451 30       		.byte	0x30
+ 906 0452 00       		.byte	0
+ 907 0453 18       		.uleb128 0x18
+ 908 0454 68000000 		.4byte	.LVL14
+ 909 0458 CA040000 		.4byte	0x4ca
+ 910 045c 17       		.uleb128 0x17
+ 911 045d 01       		.uleb128 0x1
+ 912 045e 50       		.byte	0x50
+ 913 045f 01       		.uleb128 0x1
+ 914 0460 30       		.byte	0x30
+ 915 0461 17       		.uleb128 0x17
+ 916 0462 01       		.uleb128 0x1
+ 917 0463 51       		.byte	0x51
+ 918 0464 01       		.uleb128 0x1
+ 919 0465 30       		.byte	0x30
+ 920 0466 17       		.uleb128 0x17
+ 921 0467 01       		.uleb128 0x1
+ 922 0468 52       		.byte	0x52
+ 923 0469 02       		.uleb128 0x2
+ 924 046a 08       		.byte	0x8
+ 925 046b 7F       		.byte	0x7f
+ 926 046c 17       		.uleb128 0x17
+ 927 046d 01       		.uleb128 0x1
+ 928 046e 53       		.byte	0x53
+ 929 046f 02       		.uleb128 0x2
+ 930 0470 08       		.byte	0x8
+ 931 0471 9D       		.byte	0x9d
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 32
+
+
+ 932 0472 17       		.uleb128 0x17
+ 933 0473 02       		.uleb128 0x2
+ 934 0474 7D       		.byte	0x7d
+ 935 0475 00       		.sleb128 0
+ 936 0476 03       		.uleb128 0x3
+ 937 0477 0A       		.byte	0xa
+ 938 0478 1F05     		.2byte	0x51f
+ 939 047a 00       		.byte	0
+ 940 047b 00       		.byte	0
+ 941 047c 19       		.uleb128 0x19
+ 942 047d A7000000 		.4byte	0xa7
+ 943 0481 8C040000 		.4byte	0x48c
+ 944 0485 1A       		.uleb128 0x1a
+ 945 0486 B5000000 		.4byte	0xb5
+ 946 048a 0F       		.byte	0xf
+ 947 048b 00       		.byte	0
+ 948 048c 19       		.uleb128 0x19
+ 949 048d 9C040000 		.4byte	0x49c
+ 950 0491 9C040000 		.4byte	0x49c
+ 951 0495 1A       		.uleb128 0x1a
+ 952 0496 B5000000 		.4byte	0xb5
+ 953 049a 0B       		.byte	0xb
+ 954 049b 00       		.byte	0
+ 955 049c 1B       		.uleb128 0x1b
+ 956 049d 81000000 		.4byte	0x81
+ 957 04a1 1C       		.uleb128 0x1c
+ 958 04a2 B8020000 		.4byte	.LASF48
+ 959 04a6 02       		.byte	0x2
+ 960 04a7 E001     		.2byte	0x1e0
+ 961 04a9 AD040000 		.4byte	0x4ad
+ 962 04ad 1B       		.uleb128 0x1b
+ 963 04ae 8C040000 		.4byte	0x48c
+ 964 04b2 1D       		.uleb128 0x1d
+ 965 04b3 CB000000 		.4byte	.LASF25
+ 966 04b7 CB000000 		.4byte	.LASF25
+ 967 04bb 02       		.byte	0x2
+ 968 04bc 0402     		.2byte	0x204
+ 969 04be 1D       		.uleb128 0x1d
+ 970 04bf D6000000 		.4byte	.LASF26
+ 971 04c3 D6000000 		.4byte	.LASF26
+ 972 04c7 02       		.byte	0x2
+ 973 04c8 F501     		.2byte	0x1f5
+ 974 04ca 1E       		.uleb128 0x1e
+ 975 04cb 94020000 		.4byte	.LASF27
+ 976 04cf 94020000 		.4byte	.LASF27
+ 977 04d3 06       		.byte	0x6
+ 978 04d4 4F       		.byte	0x4f
+ 979 04d5 1E       		.uleb128 0x1e
+ 980 04d6 EF020000 		.4byte	.LASF28
+ 981 04da EF020000 		.4byte	.LASF28
+ 982 04de 07       		.byte	0x7
+ 983 04df E7       		.byte	0xe7
+ 984 04e0 1E       		.uleb128 0x1e
+ 985 04e1 DB020000 		.4byte	.LASF29
+ 986 04e5 DB020000 		.4byte	.LASF29
+ 987 04e9 08       		.byte	0x8
+ 988 04ea 32       		.byte	0x32
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 33
+
+
+ 989 04eb 1E       		.uleb128 0x1e
+ 990 04ec ED000000 		.4byte	.LASF30
+ 991 04f0 ED000000 		.4byte	.LASF30
+ 992 04f4 08       		.byte	0x8
+ 993 04f5 33       		.byte	0x33
+ 994 04f6 1E       		.uleb128 0x1e
+ 995 04f7 F7020000 		.4byte	.LASF31
+ 996 04fb F7020000 		.4byte	.LASF31
+ 997 04ff 09       		.byte	0x9
+ 998 0500 D9       		.byte	0xd9
+ 999 0501 1E       		.uleb128 0x1e
+ 1000 0502 9F000000 		.4byte	.LASF32
+ 1001 0506 9F000000 		.4byte	.LASF32
+ 1002 050a 01       		.byte	0x1
+ 1003 050b 4E       		.byte	0x4e
+ 1004 050c 1E       		.uleb128 0x1e
+ 1005 050d 8A020000 		.4byte	.LASF33
+ 1006 0511 8A020000 		.4byte	.LASF33
+ 1007 0515 0A       		.byte	0xa
+ 1008 0516 92       		.byte	0x92
+ 1009 0517 1E       		.uleb128 0x1e
+ 1010 0518 41000000 		.4byte	.LASF34
+ 1011 051c 41000000 		.4byte	.LASF34
+ 1012 0520 0B       		.byte	0xb
+ 1013 0521 4D       		.byte	0x4d
+ 1014 0522 1E       		.uleb128 0x1e
+ 1015 0523 11010000 		.4byte	.LASF35
+ 1016 0527 11010000 		.4byte	.LASF35
+ 1017 052b 06       		.byte	0x6
+ 1018 052c 4C       		.byte	0x4c
+ 1019 052d 1E       		.uleb128 0x1e
+ 1020 052e 60000000 		.4byte	.LASF36
+ 1021 0532 60000000 		.4byte	.LASF36
+ 1022 0536 06       		.byte	0x6
+ 1023 0537 4D       		.byte	0x4d
+ 1024 0538 1D       		.uleb128 0x1d
+ 1025 0539 87000000 		.4byte	.LASF37
+ 1026 053d 87000000 		.4byte	.LASF37
+ 1027 0541 02       		.byte	0x2
+ 1028 0542 EB01     		.2byte	0x1eb
+ 1029 0544 1D       		.uleb128 0x1d
+ 1030 0545 31020000 		.4byte	.LASF38
+ 1031 0549 31020000 		.4byte	.LASF38
+ 1032 054d 02       		.byte	0x2
+ 1033 054e F001     		.2byte	0x1f0
+ 1034 0550 1E       		.uleb128 0x1e
+ 1035 0551 44010000 		.4byte	.LASF39
+ 1036 0555 44010000 		.4byte	.LASF39
+ 1037 0559 09       		.byte	0x9
+ 1038 055a F7       		.byte	0xf7
+ 1039 055b 1E       		.uleb128 0x1e
+ 1040 055c 62020000 		.4byte	.LASF40
+ 1041 0560 62020000 		.4byte	.LASF40
+ 1042 0564 09       		.byte	0x9
+ 1043 0565 FD       		.byte	0xfd
+ 1044 0566 1D       		.uleb128 0x1d
+ 1045 0567 75020000 		.4byte	.LASF41
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 34
+
+
+ 1046 056b 75020000 		.4byte	.LASF41
+ 1047 056f 09       		.byte	0x9
+ 1048 0570 0101     		.2byte	0x101
+ 1049 0572 1D       		.uleb128 0x1d
+ 1050 0573 19000000 		.4byte	.LASF42
+ 1051 0577 19000000 		.4byte	.LASF42
+ 1052 057b 09       		.byte	0x9
+ 1053 057c 0001     		.2byte	0x100
+ 1054 057e 00       		.byte	0
+ 1055              		.section	.debug_abbrev,"",%progbits
+ 1056              	.Ldebug_abbrev0:
+ 1057 0000 01       		.uleb128 0x1
+ 1058 0001 11       		.uleb128 0x11
+ 1059 0002 01       		.byte	0x1
+ 1060 0003 25       		.uleb128 0x25
+ 1061 0004 0E       		.uleb128 0xe
+ 1062 0005 13       		.uleb128 0x13
+ 1063 0006 0B       		.uleb128 0xb
+ 1064 0007 03       		.uleb128 0x3
+ 1065 0008 0E       		.uleb128 0xe
+ 1066 0009 1B       		.uleb128 0x1b
+ 1067 000a 0E       		.uleb128 0xe
+ 1068 000b 55       		.uleb128 0x55
+ 1069 000c 17       		.uleb128 0x17
+ 1070 000d 11       		.uleb128 0x11
+ 1071 000e 01       		.uleb128 0x1
+ 1072 000f 10       		.uleb128 0x10
+ 1073 0010 17       		.uleb128 0x17
+ 1074 0011 00       		.byte	0
+ 1075 0012 00       		.byte	0
+ 1076 0013 02       		.uleb128 0x2
+ 1077 0014 24       		.uleb128 0x24
+ 1078 0015 00       		.byte	0
+ 1079 0016 0B       		.uleb128 0xb
+ 1080 0017 0B       		.uleb128 0xb
+ 1081 0018 3E       		.uleb128 0x3e
+ 1082 0019 0B       		.uleb128 0xb
+ 1083 001a 03       		.uleb128 0x3
+ 1084 001b 0E       		.uleb128 0xe
+ 1085 001c 00       		.byte	0
+ 1086 001d 00       		.byte	0
+ 1087 001e 03       		.uleb128 0x3
+ 1088 001f 16       		.uleb128 0x16
+ 1089 0020 00       		.byte	0
+ 1090 0021 03       		.uleb128 0x3
+ 1091 0022 0E       		.uleb128 0xe
+ 1092 0023 3A       		.uleb128 0x3a
+ 1093 0024 0B       		.uleb128 0xb
+ 1094 0025 3B       		.uleb128 0x3b
+ 1095 0026 0B       		.uleb128 0xb
+ 1096 0027 49       		.uleb128 0x49
+ 1097 0028 13       		.uleb128 0x13
+ 1098 0029 00       		.byte	0
+ 1099 002a 00       		.byte	0
+ 1100 002b 04       		.uleb128 0x4
+ 1101 002c 24       		.uleb128 0x24
+ 1102 002d 00       		.byte	0
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 35
+
+
+ 1103 002e 0B       		.uleb128 0xb
+ 1104 002f 0B       		.uleb128 0xb
+ 1105 0030 3E       		.uleb128 0x3e
+ 1106 0031 0B       		.uleb128 0xb
+ 1107 0032 03       		.uleb128 0x3
+ 1108 0033 08       		.uleb128 0x8
+ 1109 0034 00       		.byte	0
+ 1110 0035 00       		.byte	0
+ 1111 0036 05       		.uleb128 0x5
+ 1112 0037 16       		.uleb128 0x16
+ 1113 0038 00       		.byte	0
+ 1114 0039 03       		.uleb128 0x3
+ 1115 003a 0E       		.uleb128 0xe
+ 1116 003b 3A       		.uleb128 0x3a
+ 1117 003c 0B       		.uleb128 0xb
+ 1118 003d 3B       		.uleb128 0x3b
+ 1119 003e 05       		.uleb128 0x5
+ 1120 003f 49       		.uleb128 0x49
+ 1121 0040 13       		.uleb128 0x13
+ 1122 0041 00       		.byte	0
+ 1123 0042 00       		.byte	0
+ 1124 0043 06       		.uleb128 0x6
+ 1125 0044 2E       		.uleb128 0x2e
+ 1126 0045 01       		.byte	0x1
+ 1127 0046 03       		.uleb128 0x3
+ 1128 0047 0E       		.uleb128 0xe
+ 1129 0048 3A       		.uleb128 0x3a
+ 1130 0049 0B       		.uleb128 0xb
+ 1131 004a 3B       		.uleb128 0x3b
+ 1132 004b 05       		.uleb128 0x5
+ 1133 004c 27       		.uleb128 0x27
+ 1134 004d 19       		.uleb128 0x19
+ 1135 004e 49       		.uleb128 0x49
+ 1136 004f 13       		.uleb128 0x13
+ 1137 0050 20       		.uleb128 0x20
+ 1138 0051 0B       		.uleb128 0xb
+ 1139 0052 01       		.uleb128 0x1
+ 1140 0053 13       		.uleb128 0x13
+ 1141 0054 00       		.byte	0
+ 1142 0055 00       		.byte	0
+ 1143 0056 07       		.uleb128 0x7
+ 1144 0057 05       		.uleb128 0x5
+ 1145 0058 00       		.byte	0
+ 1146 0059 03       		.uleb128 0x3
+ 1147 005a 0E       		.uleb128 0xe
+ 1148 005b 3A       		.uleb128 0x3a
+ 1149 005c 0B       		.uleb128 0xb
+ 1150 005d 3B       		.uleb128 0x3b
+ 1151 005e 05       		.uleb128 0x5
+ 1152 005f 49       		.uleb128 0x49
+ 1153 0060 13       		.uleb128 0x13
+ 1154 0061 00       		.byte	0
+ 1155 0062 00       		.byte	0
+ 1156 0063 08       		.uleb128 0x8
+ 1157 0064 34       		.uleb128 0x34
+ 1158 0065 00       		.byte	0
+ 1159 0066 03       		.uleb128 0x3
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 36
+
+
+ 1160 0067 0E       		.uleb128 0xe
+ 1161 0068 3A       		.uleb128 0x3a
+ 1162 0069 0B       		.uleb128 0xb
+ 1163 006a 3B       		.uleb128 0x3b
+ 1164 006b 05       		.uleb128 0x5
+ 1165 006c 49       		.uleb128 0x49
+ 1166 006d 13       		.uleb128 0x13
+ 1167 006e 00       		.byte	0
+ 1168 006f 00       		.byte	0
+ 1169 0070 09       		.uleb128 0x9
+ 1170 0071 2E       		.uleb128 0x2e
+ 1171 0072 01       		.byte	0x1
+ 1172 0073 3F       		.uleb128 0x3f
+ 1173 0074 19       		.uleb128 0x19
+ 1174 0075 03       		.uleb128 0x3
+ 1175 0076 0E       		.uleb128 0xe
+ 1176 0077 3A       		.uleb128 0x3a
+ 1177 0078 0B       		.uleb128 0xb
+ 1178 0079 3B       		.uleb128 0x3b
+ 1179 007a 0B       		.uleb128 0xb
+ 1180 007b 27       		.uleb128 0x27
+ 1181 007c 19       		.uleb128 0x19
+ 1182 007d 11       		.uleb128 0x11
+ 1183 007e 01       		.uleb128 0x1
+ 1184 007f 12       		.uleb128 0x12
+ 1185 0080 06       		.uleb128 0x6
+ 1186 0081 40       		.uleb128 0x40
+ 1187 0082 18       		.uleb128 0x18
+ 1188 0083 9742     		.uleb128 0x2117
+ 1189 0085 19       		.uleb128 0x19
+ 1190 0086 01       		.uleb128 0x1
+ 1191 0087 13       		.uleb128 0x13
+ 1192 0088 00       		.byte	0
+ 1193 0089 00       		.byte	0
+ 1194 008a 0A       		.uleb128 0xa
+ 1195 008b 898201   		.uleb128 0x4109
+ 1196 008e 00       		.byte	0
+ 1197 008f 11       		.uleb128 0x11
+ 1198 0090 01       		.uleb128 0x1
+ 1199 0091 31       		.uleb128 0x31
+ 1200 0092 13       		.uleb128 0x13
+ 1201 0093 00       		.byte	0
+ 1202 0094 00       		.byte	0
+ 1203 0095 0B       		.uleb128 0xb
+ 1204 0096 2E       		.uleb128 0x2e
+ 1205 0097 01       		.byte	0x1
+ 1206 0098 3F       		.uleb128 0x3f
+ 1207 0099 19       		.uleb128 0x19
+ 1208 009a 03       		.uleb128 0x3
+ 1209 009b 0E       		.uleb128 0xe
+ 1210 009c 3A       		.uleb128 0x3a
+ 1211 009d 0B       		.uleb128 0xb
+ 1212 009e 3B       		.uleb128 0x3b
+ 1213 009f 0B       		.uleb128 0xb
+ 1214 00a0 27       		.uleb128 0x27
+ 1215 00a1 19       		.uleb128 0x19
+ 1216 00a2 49       		.uleb128 0x49
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 37
+
+
+ 1217 00a3 13       		.uleb128 0x13
+ 1218 00a4 8701     		.uleb128 0x87
+ 1219 00a6 19       		.uleb128 0x19
+ 1220 00a7 11       		.uleb128 0x11
+ 1221 00a8 01       		.uleb128 0x1
+ 1222 00a9 12       		.uleb128 0x12
+ 1223 00aa 06       		.uleb128 0x6
+ 1224 00ab 40       		.uleb128 0x40
+ 1225 00ac 18       		.uleb128 0x18
+ 1226 00ad 9742     		.uleb128 0x2117
+ 1227 00af 19       		.uleb128 0x19
+ 1228 00b0 01       		.uleb128 0x1
+ 1229 00b1 13       		.uleb128 0x13
+ 1230 00b2 00       		.byte	0
+ 1231 00b3 00       		.byte	0
+ 1232 00b4 0C       		.uleb128 0xc
+ 1233 00b5 34       		.uleb128 0x34
+ 1234 00b6 00       		.byte	0
+ 1235 00b7 03       		.uleb128 0x3
+ 1236 00b8 08       		.uleb128 0x8
+ 1237 00b9 3A       		.uleb128 0x3a
+ 1238 00ba 0B       		.uleb128 0xb
+ 1239 00bb 3B       		.uleb128 0x3b
+ 1240 00bc 0B       		.uleb128 0xb
+ 1241 00bd 49       		.uleb128 0x49
+ 1242 00be 13       		.uleb128 0x13
+ 1243 00bf 02       		.uleb128 0x2
+ 1244 00c0 17       		.uleb128 0x17
+ 1245 00c1 00       		.byte	0
+ 1246 00c2 00       		.byte	0
+ 1247 00c3 0D       		.uleb128 0xd
+ 1248 00c4 34       		.uleb128 0x34
+ 1249 00c5 00       		.byte	0
+ 1250 00c6 03       		.uleb128 0x3
+ 1251 00c7 0E       		.uleb128 0xe
+ 1252 00c8 3A       		.uleb128 0x3a
+ 1253 00c9 0B       		.uleb128 0xb
+ 1254 00ca 3B       		.uleb128 0x3b
+ 1255 00cb 0B       		.uleb128 0xb
+ 1256 00cc 49       		.uleb128 0x49
+ 1257 00cd 13       		.uleb128 0x13
+ 1258 00ce 02       		.uleb128 0x2
+ 1259 00cf 18       		.uleb128 0x18
+ 1260 00d0 00       		.byte	0
+ 1261 00d1 00       		.byte	0
+ 1262 00d2 0E       		.uleb128 0xe
+ 1263 00d3 34       		.uleb128 0x34
+ 1264 00d4 00       		.byte	0
+ 1265 00d5 03       		.uleb128 0x3
+ 1266 00d6 0E       		.uleb128 0xe
+ 1267 00d7 3A       		.uleb128 0x3a
+ 1268 00d8 0B       		.uleb128 0xb
+ 1269 00d9 3B       		.uleb128 0x3b
+ 1270 00da 0B       		.uleb128 0xb
+ 1271 00db 49       		.uleb128 0x49
+ 1272 00dc 13       		.uleb128 0x13
+ 1273 00dd 02       		.uleb128 0x2
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 38
+
+
+ 1274 00de 17       		.uleb128 0x17
+ 1275 00df 00       		.byte	0
+ 1276 00e0 00       		.byte	0
+ 1277 00e1 0F       		.uleb128 0xf
+ 1278 00e2 0B       		.uleb128 0xb
+ 1279 00e3 01       		.byte	0x1
+ 1280 00e4 11       		.uleb128 0x11
+ 1281 00e5 01       		.uleb128 0x1
+ 1282 00e6 12       		.uleb128 0x12
+ 1283 00e7 06       		.uleb128 0x6
+ 1284 00e8 01       		.uleb128 0x1
+ 1285 00e9 13       		.uleb128 0x13
+ 1286 00ea 00       		.byte	0
+ 1287 00eb 00       		.byte	0
+ 1288 00ec 10       		.uleb128 0x10
+ 1289 00ed 2E       		.uleb128 0x2e
+ 1290 00ee 01       		.byte	0x1
+ 1291 00ef 3F       		.uleb128 0x3f
+ 1292 00f0 19       		.uleb128 0x19
+ 1293 00f1 03       		.uleb128 0x3
+ 1294 00f2 0E       		.uleb128 0xe
+ 1295 00f3 3A       		.uleb128 0x3a
+ 1296 00f4 0B       		.uleb128 0xb
+ 1297 00f5 3B       		.uleb128 0x3b
+ 1298 00f6 0B       		.uleb128 0xb
+ 1299 00f7 49       		.uleb128 0x49
+ 1300 00f8 13       		.uleb128 0x13
+ 1301 00f9 3C       		.uleb128 0x3c
+ 1302 00fa 19       		.uleb128 0x19
+ 1303 00fb 01       		.uleb128 0x1
+ 1304 00fc 13       		.uleb128 0x13
+ 1305 00fd 00       		.byte	0
+ 1306 00fe 00       		.byte	0
+ 1307 00ff 11       		.uleb128 0x11
+ 1308 0100 18       		.uleb128 0x18
+ 1309 0101 00       		.byte	0
+ 1310 0102 00       		.byte	0
+ 1311 0103 00       		.byte	0
+ 1312 0104 12       		.uleb128 0x12
+ 1313 0105 1D       		.uleb128 0x1d
+ 1314 0106 01       		.byte	0x1
+ 1315 0107 31       		.uleb128 0x31
+ 1316 0108 13       		.uleb128 0x13
+ 1317 0109 11       		.uleb128 0x11
+ 1318 010a 01       		.uleb128 0x1
+ 1319 010b 12       		.uleb128 0x12
+ 1320 010c 06       		.uleb128 0x6
+ 1321 010d 58       		.uleb128 0x58
+ 1322 010e 0B       		.uleb128 0xb
+ 1323 010f 59       		.uleb128 0x59
+ 1324 0110 0B       		.uleb128 0xb
+ 1325 0111 01       		.uleb128 0x1
+ 1326 0112 13       		.uleb128 0x13
+ 1327 0113 00       		.byte	0
+ 1328 0114 00       		.byte	0
+ 1329 0115 13       		.uleb128 0x13
+ 1330 0116 05       		.uleb128 0x5
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 39
+
+
+ 1331 0117 00       		.byte	0
+ 1332 0118 31       		.uleb128 0x31
+ 1333 0119 13       		.uleb128 0x13
+ 1334 011a 02       		.uleb128 0x2
+ 1335 011b 17       		.uleb128 0x17
+ 1336 011c 00       		.byte	0
+ 1337 011d 00       		.byte	0
+ 1338 011e 14       		.uleb128 0x14
+ 1339 011f 0B       		.uleb128 0xb
+ 1340 0120 01       		.byte	0x1
+ 1341 0121 11       		.uleb128 0x11
+ 1342 0122 01       		.uleb128 0x1
+ 1343 0123 12       		.uleb128 0x12
+ 1344 0124 06       		.uleb128 0x6
+ 1345 0125 00       		.byte	0
+ 1346 0126 00       		.byte	0
+ 1347 0127 15       		.uleb128 0x15
+ 1348 0128 34       		.uleb128 0x34
+ 1349 0129 00       		.byte	0
+ 1350 012a 31       		.uleb128 0x31
+ 1351 012b 13       		.uleb128 0x13
+ 1352 012c 02       		.uleb128 0x2
+ 1353 012d 17       		.uleb128 0x17
+ 1354 012e 00       		.byte	0
+ 1355 012f 00       		.byte	0
+ 1356 0130 16       		.uleb128 0x16
+ 1357 0131 898201   		.uleb128 0x4109
+ 1358 0134 01       		.byte	0x1
+ 1359 0135 11       		.uleb128 0x11
+ 1360 0136 01       		.uleb128 0x1
+ 1361 0137 31       		.uleb128 0x31
+ 1362 0138 13       		.uleb128 0x13
+ 1363 0139 01       		.uleb128 0x1
+ 1364 013a 13       		.uleb128 0x13
+ 1365 013b 00       		.byte	0
+ 1366 013c 00       		.byte	0
+ 1367 013d 17       		.uleb128 0x17
+ 1368 013e 8A8201   		.uleb128 0x410a
+ 1369 0141 00       		.byte	0
+ 1370 0142 02       		.uleb128 0x2
+ 1371 0143 18       		.uleb128 0x18
+ 1372 0144 9142     		.uleb128 0x2111
+ 1373 0146 18       		.uleb128 0x18
+ 1374 0147 00       		.byte	0
+ 1375 0148 00       		.byte	0
+ 1376 0149 18       		.uleb128 0x18
+ 1377 014a 898201   		.uleb128 0x4109
+ 1378 014d 01       		.byte	0x1
+ 1379 014e 11       		.uleb128 0x11
+ 1380 014f 01       		.uleb128 0x1
+ 1381 0150 31       		.uleb128 0x31
+ 1382 0151 13       		.uleb128 0x13
+ 1383 0152 00       		.byte	0
+ 1384 0153 00       		.byte	0
+ 1385 0154 19       		.uleb128 0x19
+ 1386 0155 01       		.uleb128 0x1
+ 1387 0156 01       		.byte	0x1
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 40
+
+
+ 1388 0157 49       		.uleb128 0x49
+ 1389 0158 13       		.uleb128 0x13
+ 1390 0159 01       		.uleb128 0x1
+ 1391 015a 13       		.uleb128 0x13
+ 1392 015b 00       		.byte	0
+ 1393 015c 00       		.byte	0
+ 1394 015d 1A       		.uleb128 0x1a
+ 1395 015e 21       		.uleb128 0x21
+ 1396 015f 00       		.byte	0
+ 1397 0160 49       		.uleb128 0x49
+ 1398 0161 13       		.uleb128 0x13
+ 1399 0162 2F       		.uleb128 0x2f
+ 1400 0163 0B       		.uleb128 0xb
+ 1401 0164 00       		.byte	0
+ 1402 0165 00       		.byte	0
+ 1403 0166 1B       		.uleb128 0x1b
+ 1404 0167 26       		.uleb128 0x26
+ 1405 0168 00       		.byte	0
+ 1406 0169 49       		.uleb128 0x49
+ 1407 016a 13       		.uleb128 0x13
+ 1408 016b 00       		.byte	0
+ 1409 016c 00       		.byte	0
+ 1410 016d 1C       		.uleb128 0x1c
+ 1411 016e 34       		.uleb128 0x34
+ 1412 016f 00       		.byte	0
+ 1413 0170 03       		.uleb128 0x3
+ 1414 0171 0E       		.uleb128 0xe
+ 1415 0172 3A       		.uleb128 0x3a
+ 1416 0173 0B       		.uleb128 0xb
+ 1417 0174 3B       		.uleb128 0x3b
+ 1418 0175 05       		.uleb128 0x5
+ 1419 0176 49       		.uleb128 0x49
+ 1420 0177 13       		.uleb128 0x13
+ 1421 0178 3F       		.uleb128 0x3f
+ 1422 0179 19       		.uleb128 0x19
+ 1423 017a 3C       		.uleb128 0x3c
+ 1424 017b 19       		.uleb128 0x19
+ 1425 017c 00       		.byte	0
+ 1426 017d 00       		.byte	0
+ 1427 017e 1D       		.uleb128 0x1d
+ 1428 017f 2E       		.uleb128 0x2e
+ 1429 0180 00       		.byte	0
+ 1430 0181 3F       		.uleb128 0x3f
+ 1431 0182 19       		.uleb128 0x19
+ 1432 0183 3C       		.uleb128 0x3c
+ 1433 0184 19       		.uleb128 0x19
+ 1434 0185 6E       		.uleb128 0x6e
+ 1435 0186 0E       		.uleb128 0xe
+ 1436 0187 03       		.uleb128 0x3
+ 1437 0188 0E       		.uleb128 0xe
+ 1438 0189 3A       		.uleb128 0x3a
+ 1439 018a 0B       		.uleb128 0xb
+ 1440 018b 3B       		.uleb128 0x3b
+ 1441 018c 05       		.uleb128 0x5
+ 1442 018d 00       		.byte	0
+ 1443 018e 00       		.byte	0
+ 1444 018f 1E       		.uleb128 0x1e
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 41
+
+
+ 1445 0190 2E       		.uleb128 0x2e
+ 1446 0191 00       		.byte	0
+ 1447 0192 3F       		.uleb128 0x3f
+ 1448 0193 19       		.uleb128 0x19
+ 1449 0194 3C       		.uleb128 0x3c
+ 1450 0195 19       		.uleb128 0x19
+ 1451 0196 6E       		.uleb128 0x6e
+ 1452 0197 0E       		.uleb128 0xe
+ 1453 0198 03       		.uleb128 0x3
+ 1454 0199 0E       		.uleb128 0xe
+ 1455 019a 3A       		.uleb128 0x3a
+ 1456 019b 0B       		.uleb128 0xb
+ 1457 019c 3B       		.uleb128 0x3b
+ 1458 019d 0B       		.uleb128 0xb
+ 1459 019e 00       		.byte	0
+ 1460 019f 00       		.byte	0
+ 1461 01a0 00       		.byte	0
+ 1462              		.section	.debug_loc,"",%progbits
+ 1463              	.Ldebug_loc0:
+ 1464              	.LLST0:
+ 1465 0000 30000000 		.4byte	.LVL8
+ 1466 0004 34000000 		.4byte	.LVL9
+ 1467 0008 0200     		.2byte	0x2
+ 1468 000a 30       		.byte	0x30
+ 1469 000b 9F       		.byte	0x9f
+ 1470 000c 34000000 		.4byte	.LVL9
+ 1471 0010 6E000000 		.4byte	.LVL15
+ 1472 0014 0100     		.2byte	0x1
+ 1473 0016 54       		.byte	0x54
+ 1474 0017 00000000 		.4byte	0
+ 1475 001b 00000000 		.4byte	0
+ 1476              	.LLST1:
+ 1477 001f F0000000 		.4byte	.LVL32
+ 1478 0023 F4000000 		.4byte	.LVL33
+ 1479 0027 0200     		.2byte	0x2
+ 1480 0029 30       		.byte	0x30
+ 1481 002a 9F       		.byte	0x9f
+ 1482 002b F4000000 		.4byte	.LVL33
+ 1483 002f 0E010000 		.4byte	.LVL38
+ 1484 0033 0100     		.2byte	0x1
+ 1485 0035 54       		.byte	0x54
+ 1486 0036 00000000 		.4byte	0
+ 1487 003a 00000000 		.4byte	0
+ 1488              	.LLST2:
+ 1489 003e 0C000000 		.4byte	.LVL1
+ 1490 0042 6E000000 		.4byte	.LVL15
+ 1491 0046 0200     		.2byte	0x2
+ 1492 0048 30       		.byte	0x30
+ 1493 0049 9F       		.byte	0x9f
+ 1494 004a 6E000000 		.4byte	.LVL15
+ 1495 004e CA000000 		.4byte	.LVL28
+ 1496 0052 0100     		.2byte	0x1
+ 1497 0054 58       		.byte	0x58
+ 1498 0055 DC000000 		.4byte	.LVL30
+ 1499 0059 44010000 		.4byte	.LFE60
+ 1500 005d 0100     		.2byte	0x1
+ 1501 005f 58       		.byte	0x58
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 42
+
+
+ 1502 0060 00000000 		.4byte	0
+ 1503 0064 00000000 		.4byte	0
+ 1504              	.LLST3:
+ 1505 0068 0C000000 		.4byte	.LVL1
+ 1506 006c 6E000000 		.4byte	.LVL15
+ 1507 0070 0200     		.2byte	0x2
+ 1508 0072 30       		.byte	0x30
+ 1509 0073 9F       		.byte	0x9f
+ 1510 0074 6E000000 		.4byte	.LVL15
+ 1511 0078 E0000000 		.4byte	.LVL31
+ 1512 007c 0100     		.2byte	0x1
+ 1513 007e 56       		.byte	0x56
+ 1514 007f 0E010000 		.4byte	.LVL38
+ 1515 0083 10010000 		.4byte	.LVL39
+ 1516 0087 0100     		.2byte	0x1
+ 1517 0089 56       		.byte	0x56
+ 1518 008a 10010000 		.4byte	.LVL39
+ 1519 008e 44010000 		.4byte	.LFE60
+ 1520 0092 0100     		.2byte	0x1
+ 1521 0094 55       		.byte	0x55
+ 1522 0095 00000000 		.4byte	0
+ 1523 0099 00000000 		.4byte	0
+ 1524              	.LLST4:
+ 1525 009d 74000000 		.4byte	.LVL17
+ 1526 00a1 80000000 		.4byte	.LVL18
+ 1527 00a5 0100     		.2byte	0x1
+ 1528 00a7 50       		.byte	0x50
+ 1529 00a8 80000000 		.4byte	.LVL18
+ 1530 00ac B6000000 		.4byte	.LVL25
+ 1531 00b0 0100     		.2byte	0x1
+ 1532 00b2 54       		.byte	0x54
+ 1533 00b3 00000000 		.4byte	0
+ 1534 00b7 00000000 		.4byte	0
+ 1535              	.LLST5:
+ 1536 00bb 84000000 		.4byte	.LVL19
+ 1537 00bf 98000000 		.4byte	.LVL21
+ 1538 00c3 0100     		.2byte	0x1
+ 1539 00c5 54       		.byte	0x54
+ 1540 00c6 00000000 		.4byte	0
+ 1541 00ca 00000000 		.4byte	0
+ 1542              	.LLST6:
+ 1543 00ce 90000000 		.4byte	.LVL20
+ 1544 00d2 98000000 		.4byte	.LVL21
+ 1545 00d6 0100     		.2byte	0x1
+ 1546 00d8 52       		.byte	0x52
+ 1547 00d9 00000000 		.4byte	0
+ 1548 00dd 00000000 		.4byte	0
+ 1549              	.LLST7:
+ 1550 00e1 98000000 		.4byte	.LVL21
+ 1551 00e5 AA000000 		.4byte	.LVL23
+ 1552 00e9 0100     		.2byte	0x1
+ 1553 00eb 54       		.byte	0x54
+ 1554 00ec 00000000 		.4byte	0
+ 1555 00f0 00000000 		.4byte	0
+ 1556              	.LLST8:
+ 1557 00f4 A4000000 		.4byte	.LVL22
+ 1558 00f8 AA000000 		.4byte	.LVL23
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 43
+
+
+ 1559 00fc 0100     		.2byte	0x1
+ 1560 00fe 53       		.byte	0x53
+ 1561 00ff 00000000 		.4byte	0
+ 1562 0103 00000000 		.4byte	0
+ 1563              	.LLST9:
+ 1564 0107 AA000000 		.4byte	.LVL23
+ 1565 010b B6000000 		.4byte	.LVL25
+ 1566 010f 0100     		.2byte	0x1
+ 1567 0111 54       		.byte	0x54
+ 1568 0112 00000000 		.4byte	0
+ 1569 0116 00000000 		.4byte	0
+ 1570              	.LLST10:
+ 1571 011a B4000000 		.4byte	.LVL24
+ 1572 011e B8000000 		.4byte	.LVL26
+ 1573 0122 0100     		.2byte	0x1
+ 1574 0124 52       		.byte	0x52
+ 1575 0125 00000000 		.4byte	0
+ 1576 0129 00000000 		.4byte	0
+ 1577              		.section	.debug_aranges,"",%progbits
+ 1578 0000 24000000 		.4byte	0x24
+ 1579 0004 0200     		.2byte	0x2
+ 1580 0006 00000000 		.4byte	.Ldebug_info0
+ 1581 000a 04       		.byte	0x4
+ 1582 000b 00       		.byte	0
+ 1583 000c 0000     		.2byte	0
+ 1584 000e 0000     		.2byte	0
+ 1585 0010 00000000 		.4byte	.LFB61
+ 1586 0014 08000000 		.4byte	.LFE61-.LFB61
+ 1587 0018 00000000 		.4byte	.LFB60
+ 1588 001c 44010000 		.4byte	.LFE60-.LFB60
+ 1589 0020 00000000 		.4byte	0
+ 1590 0024 00000000 		.4byte	0
+ 1591              		.section	.debug_ranges,"",%progbits
+ 1592              	.Ldebug_ranges0:
+ 1593 0000 00000000 		.4byte	.LFB61
+ 1594 0004 08000000 		.4byte	.LFE61
+ 1595 0008 00000000 		.4byte	.LFB60
+ 1596 000c 44010000 		.4byte	.LFE60
+ 1597 0010 00000000 		.4byte	0
+ 1598 0014 00000000 		.4byte	0
+ 1599              		.section	.debug_line,"",%progbits
+ 1600              	.Ldebug_line0:
+ 1601 0000 6E020000 		.section	.debug_str,"MS",%progbits,1
+ 1601      0200EB01 
+ 1601      00000201 
+ 1601      FB0E0D00 
+ 1601      01010101 
+ 1602              	.LASF23:
+ 1603 0000 74696D65 		.ascii	"timeBuffer\000"
+ 1603      42756666 
+ 1603      657200
+ 1604              	.LASF19:
+ 1605 000b 5254435F 		.ascii	"RTC_GetSecond\000"
+ 1605      47657453 
+ 1605      65636F6E 
+ 1605      6400
+ 1606              	.LASF42:
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 44
+
+
+ 1607 0019 43795379 		.ascii	"CySysTickSetCallback\000"
+ 1607      73546963 
+ 1607      6B536574 
+ 1607      43616C6C 
+ 1607      6261636B 
+ 1608              	.LASF3:
+ 1609 002e 73686F72 		.ascii	"short unsigned int\000"
+ 1609      7420756E 
+ 1609      7369676E 
+ 1609      65642069 
+ 1609      6E7400
+ 1610              	.LASF34:
+ 1611 0041 5350494D 		.ascii	"SPIM_Start\000"
+ 1611      5F537461 
+ 1611      727400
+ 1612              	.LASF22:
+ 1613 004c 5254435F 		.ascii	"RTC_GetHours\000"
+ 1613      47657448 
+ 1613      6F757273 
+ 1613      00
+ 1614              	.LASF21:
+ 1615 0059 72657456 		.ascii	"retVal\000"
+ 1615      616C00
+ 1616              	.LASF36:
+ 1617 0060 5446545F 		.ascii	"TFT_ClearScreen\000"
+ 1617      436C6561 
+ 1617      72536372 
+ 1617      65656E00 
+ 1618              	.LASF24:
+ 1619 0070 74696D31 		.ascii	"tim1\000"
+ 1619      00
+ 1620              	.LASF13:
+ 1621 0075 666C6F61 		.ascii	"float\000"
+ 1621      7400
+ 1622              	.LASF0:
+ 1623 007b 7369676E 		.ascii	"signed char\000"
+ 1623      65642063 
+ 1623      68617200 
+ 1624              	.LASF37:
+ 1625 0087 5254435F 		.ascii	"RTC_Start\000"
+ 1625      53746172 
+ 1625      7400
+ 1626              	.LASF1:
+ 1627 0091 756E7369 		.ascii	"unsigned char\000"
+ 1627      676E6564 
+ 1627      20636861 
+ 1627      7200
+ 1628              	.LASF32:
+ 1629 009f 44726177 		.ascii	"DrawString\000"
+ 1629      53747269 
+ 1629      6E6700
+ 1630              	.LASF5:
+ 1631 00aa 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1631      20756E73 
+ 1631      69676E65 
+ 1631      6420696E 
+ 1631      7400
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 45
+
+
+ 1632              	.LASF18:
+ 1633 00bc 5254435F 		.ascii	"RTC_GetMinutes\000"
+ 1633      4765744D 
+ 1633      696E7574 
+ 1633      657300
+ 1634              	.LASF25:
+ 1635 00cb 5254435F 		.ascii	"RTC_Update\000"
+ 1635      55706461 
+ 1635      746500
+ 1636              	.LASF26:
+ 1637 00d6 5254435F 		.ascii	"RTC_GetTime\000"
+ 1637      47657454 
+ 1637      696D6500 
+ 1638              	.LASF9:
+ 1639 00e2 5F5F7569 		.ascii	"__uint32_t\000"
+ 1639      6E743332 
+ 1639      5F7400
+ 1640              	.LASF30:
+ 1641 00ed 72696E67 		.ascii	"ring_Write\000"
+ 1641      5F577269 
+ 1641      746500
+ 1642              	.LASF46:
+ 1643 00f8 53797354 		.ascii	"SysTickIsrHandler\000"
+ 1643      69636B49 
+ 1643      73724861 
+ 1643      6E646C65 
+ 1643      7200
+ 1644              	.LASF14:
+ 1645 010a 646F7562 		.ascii	"double\000"
+ 1645      6C6500
+ 1646              	.LASF35:
+ 1647 0111 5446545F 		.ascii	"TFT_Init\000"
+ 1647      496E6974 
+ 1647      00
+ 1648              	.LASF2:
+ 1649 011a 73686F72 		.ascii	"short int\000"
+ 1649      7420696E 
+ 1649      7400
+ 1650              	.LASF11:
+ 1651 0124 75696E74 		.ascii	"uint16\000"
+ 1651      313600
+ 1652              	.LASF12:
+ 1653 012b 75696E74 		.ascii	"uint32\000"
+ 1653      333200
+ 1654              	.LASF47:
+ 1655 0132 6D61696E 		.ascii	"main\000"
+ 1655      00
+ 1656              	.LASF8:
+ 1657 0137 756E7369 		.ascii	"unsigned int\000"
+ 1657      676E6564 
+ 1657      20696E74 
+ 1657      00
+ 1658              	.LASF39:
+ 1659 0144 43795379 		.ascii	"CySysTickStart\000"
+ 1659      73546963 
+ 1659      6B537461 
+ 1659      727400
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 46
+
+
+ 1660              	.LASF7:
+ 1661 0153 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1661      206C6F6E 
+ 1661      6720756E 
+ 1661      7369676E 
+ 1661      65642069 
+ 1662              	.LASF45:
+ 1663 016a 433A5C55 		.ascii	"C:\\Users\\Kayas\\Documents\\PSoC Creator\\TFT\\Des"
+ 1663      73657273 
+ 1663      5C4B6179 
+ 1663      61735C44 
+ 1663      6F63756D 
+ 1664 0197 69676E30 		.ascii	"ign01.cydsn\000"
+ 1664      312E6379 
+ 1664      64736E00 
+ 1665              	.LASF43:
+ 1666 01a3 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 1666      43313120 
+ 1666      352E342E 
+ 1666      31203230 
+ 1666      31363036 
+ 1667 01d6 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 1667      20726576 
+ 1667      6973696F 
+ 1667      6E203233 
+ 1667      37373135 
+ 1668 0209 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 1668      66756E63 
+ 1668      74696F6E 
+ 1668      2D736563 
+ 1668      74696F6E 
+ 1669              	.LASF38:
+ 1670 0231 5254435F 		.ascii	"RTC_SetPeriod\000"
+ 1670      53657450 
+ 1670      6572696F 
+ 1670      6400
+ 1671              	.LASF17:
+ 1672 023f 73697A65 		.ascii	"sizetype\000"
+ 1672      74797065 
+ 1672      00
+ 1673              	.LASF6:
+ 1674 0248 6C6F6E67 		.ascii	"long long int\000"
+ 1674      206C6F6E 
+ 1674      6720696E 
+ 1674      7400
+ 1675              	.LASF44:
+ 1676 0256 6D61696E 		.ascii	"main.c\000"
+ 1676      2E6300
+ 1677              	.LASF15:
+ 1678 025d 63686172 		.ascii	"char\000"
+ 1678      00
+ 1679              	.LASF40:
+ 1680 0262 43795379 		.ascii	"CySysTickSetReload\000"
+ 1680      73546963 
+ 1680      6B536574 
+ 1680      52656C6F 
+ 1680      616400
+ARM GAS  C:\Users\Kayas\AppData\Local\Temp\ccsRnxoZ.s 			page 47
+
+
+ 1681              	.LASF41:
+ 1682 0275 43795379 		.ascii	"CySysTickGetCallback\000"
+ 1682      73546963 
+ 1682      6B476574 
+ 1682      43616C6C 
+ 1682      6261636B 
+ 1683              	.LASF33:
+ 1684 028a 50574D5F 		.ascii	"PWM_Start\000"
+ 1684      53746172 
+ 1684      7400
+ 1685              	.LASF27:
+ 1686 0294 5446545F 		.ascii	"TFT_FillRectangle\000"
+ 1686      46696C6C 
+ 1686      52656374 
+ 1686      616E676C 
+ 1686      6500
+ 1687              	.LASF10:
+ 1688 02a6 75696E74 		.ascii	"uint32_t\000"
+ 1688      33325F74 
+ 1688      00
+ 1689              	.LASF4:
+ 1690 02af 6C6F6E67 		.ascii	"long int\000"
+ 1690      20696E74 
+ 1690      00
+ 1691              	.LASF48:
+ 1692 02b8 5254435F 		.ascii	"RTC_daysBeforeMonthTbl\000"
+ 1692      64617973 
+ 1692      4265666F 
+ 1692      72654D6F 
+ 1692      6E746854 
+ 1693              	.LASF16:
+ 1694 02cf 6C6F6E67 		.ascii	"long double\000"
+ 1694      20646F75 
+ 1694      626C6500 
+ 1695              	.LASF29:
+ 1696 02db 72696E67 		.ascii	"ring_Read\000"
+ 1696      5F526561 
+ 1696      6400
+ 1697              	.LASF20:
+ 1698 02e5 696E7075 		.ascii	"inputTime\000"
+ 1698      7454696D 
+ 1698      6500
+ 1699              	.LASF28:
+ 1700 02ef 73707269 		.ascii	"sprintf\000"
+ 1700      6E746600 
+ 1701              	.LASF31:
+ 1702 02f7 43794465 		.ascii	"CyDelay\000"
+ 1702      6C617900 
+ 1703              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

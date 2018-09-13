@@ -1,0 +1,6 @@
+C:\Users\Kayas\Documents\PSoC Creator\TFT\Design01.cydsn\Design01.cyprj|950f2b5e-b461-4f78-a5a9-a75064097fd0
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|663112b8-b69a-42b2-96ef-7e48a9eb77b8
+C:\Users\Kayas\Documents\PSoC Creator\4.2\Downloads ( 4.2).cylib\Downloads ( 4.2).cyprj|2b021c47-6c18-48f5-a8f6-484c124628e1
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|219cca3f-d0eb-41ae-9d9d-d833af091226
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|6a9e5f18-805f-4012-bbd0-2fa0157899b0
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|8a92063b-31a0-47d8-b7ac-7ea69fc06a33

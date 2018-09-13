@@ -1,0 +1,7 @@
+--------------- Rebuild Started: 09/09/2018 17:10:13 Project: TFT.c, Configuration: ARM GCC 5.4-2016-q2-update Debug ---------------
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_541\Debug/TFT.lst -g -D DEBUG -D CY_CORE_ID=0 -Wall -ffunction-sections -ffat-lto-objects -Og -c D:\Psoc\TFT240_320_4200\TFT240x320.cydsn\TFT.c -o .\CortexM0\ARM_GCC_541\Debug\TFT.o
+D:\Psoc\TFT240_320_4200\TFT240x320.cydsn\TFT.c: In function 'TFT_Init':
+D:\Psoc\TFT240_320_4200\TFT240x320.cydsn\TFT.c:38:1: warning: implicit declaration of function 'rst_Write' [-Wimplicit-function-declaration]
+ rst_Write(0);
+ ^
+--------------- Rebuild Succeeded: 09/09/2018 17:10:14 ---------------

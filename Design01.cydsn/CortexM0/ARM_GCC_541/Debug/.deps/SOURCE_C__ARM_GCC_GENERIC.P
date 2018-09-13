@@ -1,0 +1,108 @@
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/CortexM0/ARM_GCC_541/Debug/main.o : C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/CS.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/CS_aliases.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/Clock_1.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/CyFlash.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/CyLib.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/D_C.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/D_C_aliases.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/LED.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/LED_aliases.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/PWM.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/RTC.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SCK.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SCK_aliases.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SDA.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SDA_aliases.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SPIM.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SPIM_IntClock.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SPIM_PVT.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SW_Tx_UART_1.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SW_Tx_UART_1_PVT.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_BOOT.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_PINS.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_PVT.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_SCBCLK.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_SPI_UART.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_SPI_UART_PVT.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_tx.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_tx_aliases.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cmsis_armcc.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cmsis_compiler.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cmsis_gcc.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/core_cm0.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/core_cm0_psoc4.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cyPm.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cy_em_eeprom.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cydisabledsheets.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cyfitter_cfg.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cypins.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cytypes.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/project.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/ring.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/ring_aliases.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/rst.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/rst_aliases.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/TFT.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/main.c 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/CS.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/CS_aliases.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/Clock_1.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/CyFlash.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/CyLFClk.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/CyLib.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/D_C.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/D_C_aliases.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/LED.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/LED_aliases.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/PWM.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/RTC.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SCK.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SCK_aliases.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SDA.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SDA_aliases.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SPIM.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SPIM_IntClock.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SPIM_PVT.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SW_Tx_UART_1.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SW_Tx_UART_1_PVT.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_BOOT.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_PINS.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_PVT.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_SCBCLK.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_SPI_UART.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_SPI_UART_PVT.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_tx.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_tx_aliases.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cmsis_armcc.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cmsis_compiler.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cmsis_gcc.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/core_cm0.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/core_cm0_psoc4.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cyPm.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cy_em_eeprom.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cydevice_trm.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cydisabledsheets.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cyfitter.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cyfitter_cfg.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cypins.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cytypes.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/project.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/ring.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/ring_aliases.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/rst.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/rst_aliases.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/TFT.h : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/main.c : 
+
+C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/CortexM0/ARM_GCC_541/Debug/TFT.o : C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/CS.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/CS_aliases.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/Clock_1.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/CyFlash.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/CyLFClk.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/CyLib.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/D_C.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/D_C_aliases.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/LED.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/LED_aliases.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/PWM.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/RTC.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SCK.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SCK_aliases.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SDA.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SDA_aliases.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SPIM.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SPIM_IntClock.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SPIM_PVT.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SW_Tx_UART_1.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/SW_Tx_UART_1_PVT.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_BOOT.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_PINS.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_PVT.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_SCBCLK.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_SPI_UART.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_SPI_UART_PVT.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_tx.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/UART_1_tx_aliases.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cmsis_armcc.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cmsis_compiler.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cmsis_gcc.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/core_cm0.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/core_cm0_psoc4.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cyPm.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cy_em_eeprom.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cydevice_trm.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cydisabledsheets.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cyfitter.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cyfitter_cfg.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cypins.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/cytypes.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/project.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/ring.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/ring_aliases.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/rst.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/Generated_Source/PSoC4/rst_aliases.h C:/Users/Kayas/Documents/PSoC\ Creator/TFT/Design01.cydsn/TFT.h D:/Psoc/TFT240_320_4200/TFT240x320.cydsn/TFT.c D:/Psoc/TFT240_320_4200/TFT240x320.cydsn/fonts.h 
+
+D:/Psoc/TFT240_320_4200/TFT240x320.cydsn/TFT.c : 
+
+D:/Psoc/TFT240_320_4200/TFT240x320.cydsn/fonts.h : 
+
