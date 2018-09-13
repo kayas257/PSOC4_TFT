@@ -2,9 +2,10 @@
  * TFT.c
  *
  *  Created: 14.10.2013 12:47:54
- *   Author: Ovner
+ *   Updated : 7-09-2018
+ *   Author: Ovner, Kayas
  *
- * My additions: 9.02.2014
+ * My additions: 7.9.2018
  */ 
 #include "TFT.h"
 #include "fonts.h"

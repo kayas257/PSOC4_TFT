@@ -1,7 +1,6 @@
 /*
  * TFT.h
  *
- * IDEA:  http://extmemory.blogspot.ru/2013/11/tft-ili9341.html    Author: Ovner
  * 
  *  
  */ 
