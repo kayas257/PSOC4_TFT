@@ -1,3 +1,3 @@
-# PSoC-TFT-Interfacing
-PSoC-4 TFT Interfacing
+# PSoC-TFT-Interfacing PSOC Display Interface
+PSoC TFT Interfacing
 PSOC TFT display interfacing
